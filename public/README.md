@@ -1,6 +1,8 @@
-# dodoc2
+# inprogress
 
-> do•doc is a documentation tool for creativity.
+> an experimental tool created during a workshop for and with students from ENSAD Art School in Paris, led by l’Atelier des chercheurs (http://latelier-des-chercheurs.fr) following an invitation by Vadim Bernard (teacher in interaction design).
+
+February 2019
 
 ## Build Setup
 

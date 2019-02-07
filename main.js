@@ -192,7 +192,7 @@ function setApplicationMenu() {
       label: 'Electron',
       submenu: [
         {
-          label: 'About do•doc',
+          label: 'About',
           selector: 'orderFrontStandardAboutPanel:'
         },
         {

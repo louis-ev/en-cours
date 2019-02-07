@@ -1,7 +1,7 @@
 {
-  "name": "dodoc",
+  "name": "inprogress",
   "productName": "ensad_workshop",
-  "version": "0.0.9-dev",
+  "version": "0.0.1-dev",
   "description": "",
   "author": "L’Atelier des Chercheurs <https://latelier-des-chercheurs.fr/>",
   "homepage": "https://github.com/l-atelier-des-chercheurs/",
@@ -10,10 +10,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/l-atelier-des-chercheurs/dodoc.git"
+    "url": "https://github.com/louis-ev/workshop_ensad.git"
   },
   "bugs": {
-    "url": "https://github.com/l-atelier-des-chercheurs/dodoc/issues"
+    "url": "https://github.com/louis-ev/workshop_ensad/issues"
   },
   "scripts": {
     "start": "electron .",
@@ -24,8 +24,8 @@
   },
   "build": {
     "electronVersion": "2.0.5",
-    "appId": "dodoc2",
-    "productName": "do•doc",
+    "appId": "inprogress",
+    "productName": "inprogress",
     "asar": false,
     "mac": {
       "category": "public.app-category.education"

@@ -36,10 +36,10 @@ module.exports = (function() {
     slug: term => slug(term),
     clip: (value, min, max) => clip(value, min, max),
     decodeBase64Image: dataString => decodeBase64Image(dataString),
-    writeAudioToDisk: (slugProjectName, mediaName, dataURL) =>
-      writeAudioToDisk(slugProjectName, mediaName, dataURL),
-    writeVideoToDisk: (slugProjectName, mediaName, dataURL) =>
-      writeVideoToDisk(slugProjectName, mediaName, dataURL),
+    writeAudioToDisk: (slugFolderName, mediaName, dataURL) =>
+      writeAudioToDisk(slugFolderName, mediaName, dataURL),
+    writeVideoToDisk: (slugFolderName, mediaName, dataURL) =>
+      writeVideoToDisk(slugFolderName, mediaName, dataURL),
     makeStopmotionFromImageSequence: d => makeStopmotionFromImageSequence(d)
   };
 
@@ -77,7 +77,9 @@ module.exports = (function() {
       // let's find the extension if it exists
       var fileExtension = new RegExp(settings.regexpGetFileExtension, 'i').exec(
         fileName
-      )[0];
+      );
+      fileExtension = fileExtension === null ? '' : fileExtension[0];
+
       // remove extension
       var fileNameWithoutExtension = new RegExp(
         settings.regexpRemoveFileExtension,
@@ -149,14 +151,14 @@ module.exports = (function() {
   function sendEventWithContent(sendEvent, objectContent, io, socket) {
     let eventAndContentJson = eventAndContent(sendEvent, objectContent);
     let eventAndContentJson_string = JSON.stringify(
-      eventAndContentJson,
+      eventAndContentJson.socketevent,
       null,
       4
     );
     if (socket) {
       // content sent only to one user
       dev.logpackets(
-        `eventAndContentJson for user ${
+        `sendEventWithContent for user ${
           socket.id
         } = ${eventAndContentJson_string}`
       );
@@ -167,7 +169,7 @@ module.exports = (function() {
     } else {
       // content broadcasted to all connected users
       dev.logpackets(
-        `eventAndContentJson for all users = ${eventAndContentJson_string}`
+        `sendEventWithContent for all users = ${eventAndContentJson_string}`
       );
       io.sockets.emit(
         eventAndContentJson['socketevent'],
@@ -175,8 +177,15 @@ module.exports = (function() {
       );
     }
     dev.logpackets(
-      `eventAndContentJson — packet sent, string length: ${
-        eventAndContentJson_string.length
+      `sendEventWithContent — sending packet with content = ${JSON.stringify(
+        eventAndContentJson['content'],
+        null,
+        4
+      )}`
+    );
+    dev.logpackets(
+      `eventAndContentJson — sending packet with string length = ${
+        JSON.stringify(eventAndContentJson['content']).length
       }`
     );
   }
@@ -234,7 +243,7 @@ module.exports = (function() {
     return response;
   }
 
-  function writeAudioToDisk(slugProjectName, mediaName, dataURL) {
+  function writeAudioToDisk(slugFolderName, mediaName, dataURL) {
     return new Promise(function(resolve, reject) {
       dev.logfunction('COMMON — writeAudioToDisk');
       if (dataURL === undefined) {
@@ -255,10 +264,7 @@ module.exports = (function() {
         fs.writeFile(pathToTempMedia, fileBuffer, function(err) {
           if (err) reject(err);
 
-          let pathToMedia = path.join(
-            getFolderPath(slugProjectName),
-            mediaName
-          );
+          let pathToMedia = path.join(getFolderPath(slugFolderName), mediaName);
           ffmpeg(pathToTempMedia)
             .audioCodec('libmp3lame')
             .save(pathToMedia)
@@ -271,7 +277,7 @@ module.exports = (function() {
     });
   }
 
-  function writeVideoToDisk(slugProjectName, mediaName, dataURL) {
+  function writeVideoToDisk(slugFolderName, mediaName, dataURL) {
     return new Promise(function(resolve, reject) {
       dev.logfunction('COMMON — writeVideoToDisk');
       if (dataURL === undefined) {
@@ -287,7 +293,7 @@ module.exports = (function() {
         '_medias'
       );
       fs.mkdirp(cachePath, function() {
-        let pathToMedia = path.join(getFolderPath(slugProjectName), mediaName);
+        let pathToMedia = path.join(getFolderPath(slugFolderName), mediaName);
         fs.writeFile(pathToMedia, fileBuffer, function(err) {
           if (err) reject(err);
           resolve();
@@ -297,7 +303,7 @@ module.exports = (function() {
         //   if (err) reject(err);
 
         //   let pathToMedia = path.join(
-        //     getFolderPath(slugProjectName),
+        //     getFolderPath(slugFolderName),
         //     mediaName
         //   );
         //   ffmpeg(pathToTempMedia)
@@ -331,9 +337,13 @@ module.exports = (function() {
           // ask ffmpeg to make a video from the cache images
           var proc = new ffmpeg()
             .input(path.join(tempFolder, 'img-%04d.jpeg'))
-            .withFpsInput(frameRate)
-            .withVideoCodec('libvpx')
-            .addOptions(['-vb 8000k', '-f webm'])
+            .inputFPS(frameRate)
+            .fps(frameRate)
+            .withVideoCodec('libx264')
+            .withVideoBitrate('8000k')
+            .addOptions(['-preset slow', '-tune animation'])
+            .noAudio()
+            .toFormat('mp4')
             .output(pathToMedia)
             .on('progress', progress => {
               dev.logverbose(

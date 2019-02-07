@@ -12,11 +12,9 @@ html
     - if(mode === 'export_publication')
       style.
         @import "./_fonts/fira/fira.css";
-        @import "./_fonts/nanook/nanook.css";
     - else
       style.
         @import "/fonts/fira/fira.css";
-        @import "/fonts/nanook/nanook.css";
 
     script.
       /***********
@@ -44,16 +42,18 @@ html
       /* state contains settings data, time and client specific data */
       window.state = {
         appVersion: "!{global.appInfos.version}",
+        session_password: "!{global.session_password}",
         authorsFolder: "!{authorsFolder}",
         protocol: "!{protocol}",
         connected: false,
         localNetworkInfos: {},
-        //- list_of_projects_whose_medias_are_tracked: [],
         mode: "!{mode}",
         dev_mode: "!{ isDebug ? "debug" : "production" }",
         noticeOfError: "!{noticeOfError}",
         is_electron: !!(window && window.process && window.process.type) && !{ mode === "export" ? false : true },
-        is_darwin: !!(window && window.process && window.process.platform === 'darwin') && !{ mode === "export" ? false : true }
+        is_darwin: !!(window && window.process && window.process.platform === 'darwin') && !{ mode === "export" ? false : true },
+        clients: [],
+        list_authorized_folders: []
       };
 
     //-
@@ -61,6 +61,8 @@ html
 
   body(data-mode=mode)
     #app
+
+    script(src='/socket.io.js')
 
     - if(mode === 'export_publication')
       script(src='./_dist/build.js')

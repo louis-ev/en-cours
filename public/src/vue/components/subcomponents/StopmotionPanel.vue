@@ -10,12 +10,13 @@
           :slugFolderName="stopmotiondata.slugFolderName"
           :media="current_single_media"
           :subfolder="'_stopmotions/'"
+          :preview_size="1200"
         />
         <button
           type="button"
           :disabled="read_only"
           @click="removeMedia(current_single_media.metaFileName)"
-          class="buttonLink bg-orange c-noir m_stopmotionpanel--medias--single--removeMedia"
+          class="buttonLink button-bg_rounded border c-blanc m_stopmotionpanel--medias--single--removeMedia"
         >
           <span class="">
             {{ $t('remove') }}
@@ -37,6 +38,7 @@
             :slugFolderName="stopmotiondata.slugFolderName"
             :media="media"
             :subfolder="'_stopmotions/'"
+            :preview_size="150"
           />
         </div>
       </div>
@@ -197,6 +199,7 @@ export default {
 
     },
     backToStopmotion: function() {
+      console.log('METHODS • StopmotionPanel: backToStopmotion');
       this.$root.removeMedia({
         type: 'projects',
         slugFolderName: this.slugProjectName,
@@ -205,10 +208,12 @@ export default {
       this.videopreview = false;    
     },
     cancelStopmotion: function() {
-      this.current_single_media = false;
-      this.$nextTick(() => {
-        this.$emit('close');      
-      });
+      if (window.confirm(this.$t('sure_to_cancel_stopmotion'))) {
+        this.current_single_media = false;
+        this.$nextTick(() => {
+          this.$emit('close');      
+        });
+      }
     },
     save: function() {
       this.current_single_media = false;
@@ -231,6 +236,7 @@ export default {
       });
     },
     removeMedia: function(slugMediaName) {
+      console.log('METHODS • StopmotionPanel: removeMedia');
       this.$root.removeMedia({
         type: 'stopmotions',
         slugFolderName: this.stopmotiondata.slugFolderName, 

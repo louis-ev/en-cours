@@ -4,6 +4,7 @@
     @submit="newPublication"
     :read_only="read_only"
     :typeOfModal="'EditMeta'"
+    :askBeforeClosingModal="askBeforeClosingModal"
     >
     <template slot="header">
       <span class="">{{ $t('create_a_publication') }}</span>
@@ -17,13 +18,6 @@
         <input type="text" v-model="publidata.name" required autofocus>
       </div>
 
-<!-- Author(s) -->
-      <div class="margin-bottom-small">
-        <label>{{ $t('author') }}</label><br>
-        <textarea v-model="publidata.authors">
-        </textarea>
-      </div>
-
 <!-- Template -->
       <div class="margin-bottom-small">
         <label>{{ $t('format') }}</label>
@@ -31,11 +25,24 @@
           <option value="page_by_page">
             {{ $t('page_by_page') }}
           </option>
+          <option value="video_assemblage">
+            {{ $t('video_assemblage') }}
+          </option>
           <option value="web" disabled>
             {{ $t('web') }}
           </option>
         </select>
       </div>
+
+<!-- Author(s) -->
+      <div class="margin-bottom-small">
+        <label>{{ $t('author') }}</label><br>
+        <AuthorsInput
+          :currentAuthors="publidata.authors"
+          @authorsChanged="newAuthors => publidata.authors = newAuthors"
+        />
+      </div>
+
 
     </template>
 
@@ -47,22 +54,33 @@
 </template>
 <script>
 import Modal from './BaseModal.vue';
+import AuthorsInput from '../subcomponents/AuthorsInput.vue';
 
 export default {
   props: {
     read_only: Boolean
   },
   components: {
-    Modal
+    Modal,
+    AuthorsInput
   },
   data() {
     return {
       publidata: {
         name: '',
         template: 'page_by_page',
-        authors: this.$root.settings.current_author.hasOwnProperty('name') ? this.$root.settings.current_author.name:''
+        authors: this.$root.settings.current_author.hasOwnProperty('name') ? [{ name: this.$root.settings.current_author.name }] : '' 
       }
     };
+  },
+  watch: {
+    'publidata.name': function() {
+      if(this.publidata.name.length > 0) {
+        this.askBeforeClosingModal = true;
+      } else {
+        this.askBeforeClosingModal = false;
+      }
+    }
   },
   computed: {},
   methods: {
@@ -97,8 +115,14 @@ export default {
         name,
         authors: this.publidata.authors,
         template: this.publidata.template,
-        width: 210,
-        height: 297,
+        width: 297,
+        height: 420,
+        style: "human tech days",
+        header_left: "Human Tech Days",
+        gridstep: 5,
+        margin_left: 20,
+        margin_right: 20,
+
         pages: [{
           id: +new Date() + '_' + (Math.random().toString(36) + '00000000000000000').slice(2, 3)
         }]

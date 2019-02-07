@@ -22,19 +22,6 @@
         </div>
 
         <div class="m_actionbar--text">
-          <div class="switch switch-xs switch_twoway">
-            <label for="switch-xs">
-              <span class=""> 
-                {{ $t('projects') }}
-              </span>  
-            </label>
-            <input type="checkbox" id="media_switch" v-model="show_medias_instead_of_projects">
-            <label for="media_switch">
-              <span class=""> 
-                {{ $t('medias') }}
-              </span>  
-            </label>
-          </div>
           <div>
             <template v-if="Object.keys(projects).length > 0">
               <template v-if="!show_medias_instead_of_projects">

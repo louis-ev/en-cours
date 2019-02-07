@@ -10,122 +10,31 @@
         :withTitleBar="true"
       >
       </SystemBar>
-
-      <TopBar
-        :has_back_button="$root.do_navigation.view !== 'ListView'"
-        :slugProjectName="$root.do_navigation.current_slugProjectName"
-        :project="$root.currentProject"
-        :authors="$root.store.authors"
-      />
       
       <div class="m_activitiesPanel">
         <div 
-          :style="{ cursor, userSelect}" 
-          class="vue-splitter-container clearfix" 
+          class="m_activitiesPanel--do"
+          :class="{ 'is--large' : activitiesPanel_isLarge }"
         >
-          <pane 
-            class="splitter-pane splitter-paneL" 
-            :class="{ 'is--dragged' : is_dragged }"
-            :split="split" :style="{ [type]: percent+'%'}">
-
-            <div 
-              class="m_activitiesPanel--do"
-              :class="{ 'is--large' : activitiesPanel_isLarge }"
-            >
-              <div style="position: relative; height: 100%; overflow: hidden">
-                <!-- v-show="$root.do_navigation.view === 'ListView'" -->
-                <transition name="ListView" :duration="500">
-                  <ListView
-                    v-show="$root.do_navigation.view === 'ListView'"
-                    :presentationMD="$root.store.presentationMD"
-                    :read_only="!$root.state.connected"
-                    :projects="$root.store.projects"
-                  />
-                </transition>
-                <transition name="ProjectView" :duration="500">
-                  <ProjectView
-                    v-if="['ProjectView', 'CaptureView'].includes($root.do_navigation.view)"
-                    :slugProjectName="$root.do_navigation.current_slugProjectName"
-                    :project="$root.currentProject"
-                    :read_only="!$root.state.connected"
-                  />
-                </transition>
-
-                <transition name="CaptureView" :duration="500">
-                  <CaptureView
-                    v-if="$root.do_navigation.view === 'CaptureView'"
-                    :slugProjectName="$root.do_navigation.current_slugProjectName"
-                    :project="$root.currentProject"
-                    :read_only="!$root.state.connected"
-                  />
-                </transition>
-              </div>
-            </div>
-
-          </pane>
-
-          <resizer 
-            :class="{ 'is--dragged' : is_dragged }"
-            :className="className" 
-            :style="{ [resizeType]: percent+'%'}" 
-            :split="split" 
-            @mousedown.native="onMouseDown" 
-            @click.native="onClick">
-          </resizer>
-
-          <pane 
-            class="splitter-pane splitter-paneR" 
-            :class="{ 'is--dragged' : is_dragged }"
-            :split="split" 
-            :style="{ [type]: 100-percent+'%'}">
-            <div 
-              class="m_activitiesPanel--doc"
-              :class="{ 'is--open' : $root.settings.show_publi_panel }"
-            >
-              <button
-                class="publiButton"
-                :class="{ 
-                  'is--open' : $root.settings.show_publi_panel, 
-                  'is--dragged' : is_dragged,
-                  'is--allthewaytotheleft' : percent === 0 
-                }"
-                @mousedown.stop.prevent="dragPubliPanel($event, 'mouse')"
-                @touchstart.stop.prevent="dragPubliPanel($event, 'touch')"   
-                :key="'openPubli'"
-              >
-                <!-- v-if="$root.do_navigation.view !== 'CaptureView'" -->
-                <img src="/images/i_publi.svg" width="48" height="48" />
-                <span class="margin-small">
-                  {{ $t('publication') }}
-                </span>
-              </button>
-
-              <div style="position: relative; height: 100%; overflow: hidden">
-                <transition name="ListView" :duration="500">
-                  <Publications
-                    v-if="$root.settings.show_publi_panel && !$root.settings.current_slugPubliName"
-                    :publications="$root.store.publications"
-                    :read_only="!$root.state.connected"
-                  />
-                </transition>
-                <transition name="ProjectView" :duration="500">
-                  <PagePublication
-                    v-if="$root.settings.current_slugPubliName !== false && $root.store.publications[$root.settings.current_slugPubliName].template === 'page_by_page'"
-                    :slugPubliName="$root.settings.current_slugPubliName"
-                    :publication="$root.store.publications[$root.settings.current_slugPubliName]"
-                    :read_only="!$root.state.connected"
-                  />
-                  <VideoPublication
-                    v-else-if="$root.settings.current_slugPubliName !== false && $root.store.publications[$root.settings.current_slugPubliName].template === 'video_assemblage'"
-                    :slugPubliName="$root.settings.current_slugPubliName"
-                    :publication="$root.store.publications[$root.settings.current_slugPubliName]"
-                    :read_only="!$root.state.connected"
-                  />
-                </transition>
-              </div>
-            </div>
-          </pane>
-        
+          <div style="position: relative; height: 100%; overflow: hidden">
+            <!-- v-show="$root.do_navigation.view === 'ListView'" -->
+            <transition name="ListView" :duration="500">
+              <ListView
+                v-show="$root.do_navigation.view === 'ListView'"
+                :presentationMD="$root.store.presentationMD"
+                :read_only="!$root.state.connected"
+                :projects="$root.store.projects"
+              />
+            </transition>
+            <transition name="ProjectView" :duration="500">
+              <ProjectView
+                v-if="['ProjectView'].includes($root.do_navigation.view)"
+                :slugProjectName="$root.do_navigation.current_slugProjectName"
+                :project="$root.currentProject"
+                :read_only="!$root.state.connected"
+              />
+            </transition>
+          </div>
         </div>
       </div>
       <EditMedia
@@ -137,22 +46,7 @@
         :read_only="!$root.state.connected"
       >
       </EditMedia>      
-
-      <!-- <Clients 
-        :clients="$root.state.clients"
-      /> -->
-
     </template>  
-    <template 
-      v-else-if="$root.state.mode === 'export_publication'"
-    >    
-      <PagePublication
-        v-if="$root.settings.current_slugPubliName !== false"
-        :slugPubliName="$root.settings.current_slugPubliName"
-        :publication="$root.store.publications[$root.settings.current_slugPubliName]"
-        :read_only="!$root.state.connected"
-      />
-    </template>    
 
     <portal-target name="modal_container" />
 
@@ -164,32 +58,16 @@ import SystemBar from './SystemBar.vue';
 import TopBar from './TopBar.vue';
 import ListView from './ListView.vue';
 import ProjectView from './ProjectView.vue';
-import CaptureView from './CaptureView.vue';
 import EditMedia from './components/modals/EditMedia.vue';
 
-import Publications from './Publications.vue';
-import PagePublication from './components/PagePublication.vue';
-import VideoPublication from './components/VideoPublication.vue';
-import Clients from './components/Clients.vue';
-
-import Resizer from './components/splitpane/Resizer.vue'
-import Pane from './components/splitpane/Pane.vue'
 
 export default {
   name: 'app',
   components: {
     SystemBar,
-    TopBar,
     ListView,
     ProjectView,
-    CaptureView,
-    EditMedia,
-    Publications,
-    PagePublication,
-    VideoPublication,
-    Resizer, 
-    Pane,
-    Clients
+    EditMedia
   },
   props: {
   },

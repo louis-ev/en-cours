@@ -833,7 +833,7 @@ let vm = new Vue({
       }
       this.$socketio.editMedia(mdata);
     },
-    canAccessFolder: function({ type, slugFolderName }) {
+    canAdminFolder: function({ type, slugFolderName }) {
       if (!this.store[type].hasOwnProperty(slugFolderName)) return false;
 
       // if folder doesn’t have a password set
@@ -864,13 +864,7 @@ let vm = new Vue({
       if (window.state.dev_mode === 'debug') {
         console.log(`ROOT EVENT: openProject: ${slugProjectName}`);
       }
-      if (
-        !this.store.projects.hasOwnProperty(slugProjectName) ||
-        !this.canAccessFolder({
-          type: 'projects',
-          slugFolderName: slugProjectName
-        })
-      ) {
+      if (!this.store.projects.hasOwnProperty(slugProjectName)) {
         console.log('Missing folder key on the page, aborting.');
         this.closeProject();
         return false;

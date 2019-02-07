@@ -1,23 +1,25 @@
 <template>
-  <div class="m_project--library">
-    <div class="m_actionbar" v-show="$root.state.connected">
+  <div>
+    <div v-show="$root.state.connected">
       <div class="m_actionbar--buttonBar">
-        <button type="button" class="barButton barButton_capture" 
-          v-if="((project.password === 'has_pass') || project.password !== 'has_pass')"
-          @click="openCapture"
-          :disabled="read_only"
+
+        <button 
+          class="backButton text-ellipsis" 
+          type="button" 
+          v-if="$root.do_navigation.view !== 'ListView'" 
+          @click="$root.navigation_back()"
         >
-          <span>    
-            {{ $t('capture') }}
-          </span>
+          ‹
         </button>
+        Hello
 
         <button type="button" class="barButton barButton_import" 
-          v-if="((project.password === 'has_pass') || project.password !== 'has_pass')"
+          v-if="can_admin_folder"
           @click="showImportModal = true"
         ><span>    
           {{ $t('import') }}
         </span></button>
+        
         <UploadFile
           v-if="showImportModal"
           @close="showImportModal = false"
@@ -28,6 +30,7 @@
 
         <button type="button" class="barButton barButton_text" 
           @click="createTextMedia"
+          v-if="can_admin_folder"
         >
           <span>
             {{ $t('create_text') }}
@@ -35,7 +38,7 @@
         </button>
       </div>
 
-      <div class="m_actionbar--text">
+      <!-- <div class="m_actionbar--text">
         {{ $t('showing') }} 
         <span :class="{ 'c-rouge' : sortedMedias.length !== numberOfMedias }">
           {{ sortedMedias.length }} 
@@ -62,11 +65,12 @@
             @setFavFilter="a => $root.setFavAuthorFilter(a)"
           />
         </template>
-      </div>
+      </div> -->
     </div>
 
     <transition-group
-      class="m_project--library--medias"
+      tag="div"
+      class="m_project--mediamap"
       name="list-complete"
     >
       <MediaCard
@@ -90,7 +94,8 @@ export default {
   props: {
     project: Object,
     slugProjectName: String,
-    read_only: Boolean
+    read_only: Boolean,
+    can_admin_folder: Boolean
   },
   components: {
     MediaCard,
@@ -240,7 +245,7 @@ export default {
     },
     openMediaModal(metaFileName) {
       if (this.$root.state.dev_mode === 'debug') {
-        console.log('METHODS • MediaLibrary: openMediaModal');
+        console.log('METHODS • MediaMap: openMediaModal');
       }
       this.$root.openMedia({ slugProjectName: this.slugProjectName, metaFileName });      
     },
@@ -260,27 +265,6 @@ export default {
         this.$eventHub.$off('socketio.media_created_or_updated', this.newTextMediaCreated);
         this.openMediaModal(mdata.metaFileName);
       }
-    },
-    openCapture() {
-      const iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-      if(iOS) {
-        this.showImportModal = true;
-
-        this.$alertify
-          .closeLogOnClick(true)
-          .delay(8000)
-          .error(this.$t('notifications.ios_not_compatible_with_capture'));
-        setTimeout(() => {
-          this.$alertify
-            .closeLogOnClick(true)
-            .delay(8000)
-            .log(this.$t('notifications.instead_import_with_this_button'));
-        },1500);
-
-        return;
-      }
-      
-      this.$root.do_navigation.view = 'CaptureView';
     }
   }
 }

@@ -24,7 +24,6 @@
       :preview_size="360"
       v-model="media.content"
     />
-    {{ mediaPos.x }}
 
     <div 
       v-if="(is_selected || is_hovered || is_touch) && !preview_mode" 
@@ -94,7 +93,7 @@
         @click.prevent.stop="removePubliMedia()"
         @touchstart.prevent.stop="removePubliMedia()"
       >
-        {{ $t('remove') }}
+        supp.
       </button>
     </div>
   </div>

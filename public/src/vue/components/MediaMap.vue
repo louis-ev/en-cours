@@ -1,78 +1,76 @@
 <template>
-  <div>
-    <div v-show="$root.state.connected">
-      <div class="m_actionbar--buttonBar">
+  <div class="">
+    <div class="m_actionbar--buttonBar" v-show="$root.state.connected">
 
-        <button 
-          class="backButton text-ellipsis" 
-          type="button" 
-          v-if="$root.do_navigation.view !== 'ListView'" 
-          @click="$root.navigation_back()"
-        >
-          ‹
-        </button>
-        Hello
+      <button 
+        class="backButton text-ellipsis" 
+        type="button" 
+        v-if="$root.do_navigation.view !== 'ListView'" 
+        @click="$root.navigation_back()"
+      >
+        retour
+      </button>
 
-        <button type="button" class="barButton barButton_import" 
-          v-if="can_admin_folder"
-          @click="showImportModal = true"
-        ><span>    
-          {{ $t('import') }}
-        </span></button>
-        
-        <UploadFile
-          v-if="showImportModal"
-          @close="showImportModal = false"
-          :slugFolderName="slugProjectName"
-          :type="'projects'"
-          :read_only="read_only"
-        />
+      <button type="button" class="barButton barButton_import" 
+        v-if="can_admin_folder"
+        @click="showImportModal = true"
+      ><span>    
+        {{ $t('import') }}
+      </span></button>
+      
+      <UploadFile
+        v-if="showImportModal"
+        @close="showImportModal = false"
+        :slugFolderName="slugProjectName"
+        :type="'projects'"
+        :read_only="read_only"
+      />
 
-        <button type="button" class="barButton barButton_text" 
-          @click="createTextMedia"
-          v-if="can_admin_folder"
-        >
-          <span>
-            {{ $t('create_text') }}
-          </span>
-        </button>
-      </div>
-
-      <!-- <div class="m_actionbar--text">
-        {{ $t('showing') }} 
-        <span :class="{ 'c-rouge' : sortedMedias.length !== numberOfMedias }">
-          {{ sortedMedias.length }} 
-          {{ $t('medias_of') }} 
-          {{ numberOfMedias }}
+      <button type="button" class="barButton barButton_text" 
+        @click="createTextMedia"
+        v-if="can_admin_folder"
+      >
+        <span>
+          {{ $t('create_text') }}
         </span>
-        <template v-if="$root.allKeywords.length > 0">
-          — 
-          <button type="button" class="button-nostyle text-uc button-triangle"
-            :class="{ 'is--active' : show_filters }"
-            @click="show_filters = !show_filters"
-          >{{ $t('filters') }}</button>
-        </template>
-
-        <template v-if="!show_medias_instead_of_projects && show_filters">
-          <TagsAndAuthorFilters
-            :allKeywords="mediaKeywords"
-            :allAuthors="mediaAuthors"
-            :keywordFilter="$root.settings.media_filter.keyword"
-            :authorFilter="$root.settings.media_filter.author"
-            :favFilter="$root.settings.media_filter.fav"
-            @setKeywordFilter="a => $root.setMediaKeywordFilter(a)"
-            @setAuthorFilter="a => $root.setMediaAuthorFilter(a)"
-            @setFavFilter="a => $root.setFavAuthorFilter(a)"
-          />
-        </template>
-      </div> -->
+      </button>
     </div>
 
-    <transition-group
-      tag="div"
-      class="m_project--mediamap"
-      name="list-complete"
-    >
+    <!-- <div class="m_actionbar--text">
+      {{ $t('showing') }} 
+      <span :class="{ 'c-rouge' : sortedMedias.length !== numberOfMedias }">
+        {{ sortedMedias.length }} 
+        {{ $t('medias_of') }} 
+        {{ numberOfMedias }}
+      </span>
+      <template v-if="$root.allKeywords.length > 0">
+        — 
+        <button type="button" class="button-nostyle text-uc button-triangle"
+          :class="{ 'is--active' : show_filters }"
+          @click="show_filters = !show_filters"
+        >{{ $t('filters') }}</button>
+      </template>
+
+      <template v-if="!show_medias_instead_of_projects && show_filters">
+        <TagsAndAuthorFilters
+          :allKeywords="mediaKeywords"
+          :allAuthors="mediaAuthors"
+          :keywordFilter="$root.settings.media_filter.keyword"
+          :authorFilter="$root.settings.media_filter.author"
+          :favFilter="$root.settings.media_filter.fav"
+          @setKeywordFilter="a => $root.setMediaKeywordFilter(a)"
+          @setAuthorFilter="a => $root.setMediaAuthorFilter(a)"
+          @setFavFilter="a => $root.setFavAuthorFilter(a)"
+        />
+      </template>
+    </div> -->
+
+    <div class="m_mediamap">
+      <div 
+        class="m_mediamap--grid"
+        :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
+      />
+
       <div
         v-for="media in sortedMedias" 
         :key="media.slugMediaName"
@@ -91,9 +89,7 @@
           @unselected="noSelection"
         />
       </div>
-
-    </transition-group>
-    
+    </div>    
   </div>    
 </template>
 <script>
@@ -130,7 +126,7 @@ export default {
         margin_bottom: 0,
         width: 1200,
         height: 3000,
-        gridstep: 20
+        gridstep: 50
       },
       has_media_selected: false,
     }

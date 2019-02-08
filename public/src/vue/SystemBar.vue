@@ -9,7 +9,7 @@
           @mousemove="mousemove"
           @mouseup="mouseup"
           >
-          do•doc
+          inprogress
         </div>
       </transition>
     </div>

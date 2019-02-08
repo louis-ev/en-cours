@@ -12,13 +12,16 @@
     :media_navigation="true"
     >
     <template slot="header">
-      <div class="">{{ $t('edit_the_media') }}</div>
+      <div class="" style="display: none;">
+        {{ $t('edit_the_media') }}
+      </div>
     </template>
 
     <template slot="sidebar">
       <!-- <small>{{ this.$root.allAuthors }}</small> -->
+      <span></span>
 
-      <div v-if="!read_only" class="m_modal--buttonrow">
+      <div v-if="!read_only && false" class="m_modal--buttonrow">
         <!-- CONFLICT WITH QR PRINTING -->
         <!-- <button type="button"
           class="buttonLink"
@@ -70,7 +73,7 @@
         <hr class="hide_on_print">
       </div>
 
-      <div class="hide_on_print">
+      <div v-if="false" class="hide_on_print">
         <div class="m_metaField" v-if="!!media.type">
           <div>
             {{ $t('type') }}
@@ -117,14 +120,14 @@
         </div>
 
   <!-- Caption -->
-        <div 
+        <!-- <div 
           v-if="(!read_only || !!mediadata.caption) && mediadata.type !== 'text'"
           class="margin-bottom-small" 
         >
           <label>{{ $t('caption') }}</label><br>
           <textarea v-model="mediadata.caption" :readonly="read_only">
           </textarea>
-        </div>
+        </div> -->
 
   <!-- Type of media (if guessed wrong from filename, will only be stored in the meta file and used as a reference when displaying that media on the client) -->
   <!-- Disabled for now: if an image or video is tagged as "text" or marked, a folder becomes unreadable -->

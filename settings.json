@@ -56,7 +56,7 @@
           "read_only": true        
         },
         "authors": {
-          "type": "array"
+          "type": "string"
         },
         "keywords": {
           "type": "array"

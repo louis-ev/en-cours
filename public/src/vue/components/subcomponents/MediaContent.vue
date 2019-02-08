@@ -41,14 +41,14 @@
         <div v-if="value.length !== 0" v-html="value" />
         <p v-else v-html="'…'" />
       </div>
-      <!-- <CollaborativeEditor 
+      <CollaborativeEditor 
         v-else
         v-model="htmlForEditor"
         :media="media"
         :slugFolderName="slugFolderName"
         ref="textField"
-      /> -->
-      <textarea
+      />
+      <!-- <textarea
         placeholder="…"
         class="mediaTextContent border-none bg-transparent"
         :value="value"
@@ -56,7 +56,7 @@
         ref="textField"
         autocorrect="on"
         :readonly="read_only"
-      />
+      /> -->
     </template>
     <template v-else-if="media.type === 'document'">
       <div v-if="context !== 'edit'" class="">

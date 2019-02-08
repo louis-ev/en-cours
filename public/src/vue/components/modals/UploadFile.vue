@@ -130,7 +130,11 @@ export default {
         formData.append('files', f, filename);
         const meta = {
           fileCreationDate: modified,
-          authors: this.$root.settings.current_author.hasOwnProperty('name') ? [{ name: this.$root.settings.current_author.name }] : '' 
+          authors: this.$root.settings.current_author.hasOwnProperty('name') ? [{ name: this.$root.settings.current_author.name }] : '',
+          x: Math.round(Math.random() * 5) * 40,
+          y: Math.round(Math.random() * 5) * 40,
+          width: 200,
+          height: 200
         }
         formData.append(filename, JSON.stringify(meta));
 

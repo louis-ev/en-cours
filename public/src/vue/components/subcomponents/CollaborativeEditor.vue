@@ -35,10 +35,9 @@ export default {
       editor_id: (Math.random().toString(36) + '00000000000000000').slice(2, 3 + 5),
 
       custom_toolbar: [
-        [{ 'header': [false, 1, 2, 3, 4] }],
+        [{ 'header': [false, 1] }],
         // [{ 'header': 1 }, { 'header': 2 }, { 'header': 3 }, { 'header': 4 }],
-        ['bold', 'italic', 'underline', 'link', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet'} ],
+        ['bold', 'underline', 'link'],
         ['clean']  
       ],
 
@@ -56,7 +55,7 @@ export default {
         toolbar: this.custom_toolbar
       },
       theme: 'snow',
-      formats: ['bold', 'underline', 'header', 'italic']
+      formats: ['bold', 'underline', 'header', 'link']
     });
     this.editor.root.innerHTML = this.value;
 

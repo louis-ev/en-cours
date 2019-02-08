@@ -42,10 +42,7 @@
 <!-- Author(s) -->
       <div class="margin-bottom-small">
         <label>{{ $t('author') }}</label><br>
-        <AuthorsInput
-          :currentAuthors="projectdata.authors"
-          @authorsChanged="newAuthors => projectdata.authors = newAuthors"
-        />
+        <input type="text" v-model="projectdata.authors">
       </div>
 
     </template>
@@ -77,7 +74,7 @@ export default {
       projectdata: {
         name: '',
         password: '',
-        authors: this.$root.settings.current_author.hasOwnProperty('name') ? [{ name: this.$root.settings.current_author.name }] : [],
+        authors: [],
         keywords: []
       },
       preview: undefined,

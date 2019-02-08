@@ -16,20 +16,22 @@
           class="m_activitiesPanel--do"
           :class="{ 'is--large' : activitiesPanel_isLarge }"
         >
-          <transition name="ListView" :duration="500">
-            <ListView
-              :read_only="!$root.state.connected"
-              :projects="$root.store.projects"
-            />
-          </transition>
-          <transition name="ListView" :duration="300">
-            <ProjectView
-              v-if="['ProjectView'].includes($root.do_navigation.view)"
-              :slugProjectName="$root.do_navigation.current_slugProjectName"
-              :project="$root.currentProject"
-              :read_only="!$root.state.connected"
-            />
-          </transition>
+          <div style="position: relative; height: 100%; overflow: hidden;">
+            <transition name="ListView" :duration="500">
+              <ListView
+                :read_only="!$root.state.connected"
+                :projects="$root.store.projects"
+              />
+            </transition>
+            <transition name="ListView" :duration="300">
+              <ProjectView
+                v-if="['ProjectView'].includes($root.do_navigation.view)"
+                :slugProjectName="$root.do_navigation.current_slugProjectName"
+                :project="$root.currentProject"
+                :read_only="!$root.state.connected"
+              />
+            </transition>
+          </div>
         </div>
       </div>
       <EditMedia

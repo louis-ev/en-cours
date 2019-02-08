@@ -74,26 +74,28 @@
       <!-- <button 
         type="button" 
         class="buttonLink" 
+        v-if=""
         @click.prevent.stop="toggleEditWindow()"
         @touchstart.prevent.stop="toggleEditWindow()"
       >
         {{ $t('style') }}
       </button> -->
-      <!-- <button 
+      <button 
+        v-if="media.type === 'text'"
         type="button" 
         class="buttonLink" 
-        @click.prevent.stop="$root.openMedia({ slugProjectName: media.slugProjectName, metaFileName: media.metaFileName })"
-        @touchstart.prevent.stop="$root.openMedia({ slugProjectName: media.slugProjectName, metaFileName: media.metaFileName })"
+        @click.prevent.stop="$root.openMedia({ slugProjectName: slugFolderName, metaFileName: media.metaFileName })"
+        @touchstart.prevent.stop="$root.openMedia({ slugProjectName: slugFolderName, metaFileName: media.metaFileName })"
       >
         {{ $t('edit') }}
-      </button> -->
+      </button>
       <button 
         type="button" 
         class="buttonLink" 
         @click.prevent.stop="removePubliMedia()"
         @touchstart.prevent.stop="removePubliMedia()"
       >
-        supp.
+        suppr.
       </button>
     </div>
   </div>

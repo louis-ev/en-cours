@@ -1,0 +1,14 @@
+
+@font-face {
+  font-family: 'Syne';
+  src: url('Syne-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Syne';
+  src: url('Syne-Extra.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}

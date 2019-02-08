@@ -10,30 +10,6 @@
       >
         retour
       </button>
-
-      <button type="button" class="barButton barButton_import" 
-        v-if="can_admin_folder"
-        @click="showImportModal = true"
-      ><span>    
-        {{ $t('import') }}
-      </span></button>
-      
-      <UploadFile
-        v-if="showImportModal"
-        @close="showImportModal = false"
-        :slugFolderName="slugProjectName"
-        :type="'projects'"
-        :read_only="read_only"
-      />
-
-      <button type="button" class="barButton barButton_text" 
-        @click="createTextMedia"
-        v-if="can_admin_folder"
-      >
-        <span>
-          {{ $t('create_text') }}
-        </span>
-      </button>
     </div>
 
     <!-- <div class="m_actionbar--text">
@@ -66,6 +42,31 @@
     </div> -->
 
     <div class="m_layerOptions">
+
+      <button type="button" class="barButton barButton_import" 
+        v-if="can_admin_folder"
+        @click="showImportModal = true"
+      ><span>    
+        {{ $t('import') }}
+      </span></button>
+      
+      <UploadFile
+        v-if="showImportModal"
+        @close="showImportModal = false"
+        :slugFolderName="slugProjectName"
+        :type="'projects'"
+        :read_only="read_only"
+      />
+
+      <button type="button" class="barButton barButton_text" 
+        @click="createTextMedia"
+        v-if="can_admin_folder"
+      >
+        <span>
+          {{ $t('create_text') }}
+        </span>
+      </button>
+
       <button 
         v-if="can_admin_folder"
         class="button_editmode margin-vert-verysmall font-verysmall" 
@@ -144,7 +145,7 @@ export default {
         gridstep: 50
       },
       has_media_selected: false,
-      preview_mode: !this.can_admin_folder
+      preview_mode: true
     }
   },
   mounted() {

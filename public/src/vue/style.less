@@ -142,28 +142,32 @@ body {
   overflow: hidden;
   .bg-blanc;
   margin-top: 0;
-  .boxs-card-0;
-  .flex-wrap;
+  .flex-nowrap;
+  align-items: center;
   user-select: none;
+
+  font-size: 3em;
+
+  @media screen and (max-width:720px) {
+    font-size: 2em;
+  }
 
   body.has_systembar & {
     padding-top: @t-systemBarHeight * 0.666;
   }
 
+  @media screen and (max-width: 50rem) {
+    .flex-wrap;
+  }
+
   > * {
     min-width: 180px;
-    flex: 1 1 0;
-    
-    @media screen and (max-width: 50rem) {
-      flex: 1 0 100%;
-    }
+    flex: 0 0 auto;
   
     &.m_topbar--center {
-      min-width: 200px;
-      max-width: 200px;
+      flex: 1 1 auto;
 
       @media screen and (max-width: 50rem) {
-        max-width: none;
       }
     }
   }  
@@ -182,10 +186,21 @@ body {
       height: @t-hauteur_topbar;  
       cursor: pointer;    
       flex-shrink: 0;
+      font-weight: bold;
+
+      margin: 0 @t-skipline;
 
       display: flex;
       align-items: center;
       justify-content: flex-start;
+
+      font-size: inherit;
+
+      .m_topbar--left--logo--type {
+  
+      }
+
+      
 
       > * {
         flex: 0 0 auto;
@@ -236,92 +251,6 @@ body {
       }
     }
 
-    .m_topbar--left--breadcrumb {
-      position: relative;
-      padding-right: @t-skipline;
-      overflow: hidden;
-
-      display: flex;
-      flex-flow: row nowrap;
-      align-content: flex-start;
-      align-items: center;
-
-      @media screen and (max-width: 50rem) {
-        display: none;
-      }
-
-      > * {
-        flex: 0 1 auto;
-      }
-      
-      button {
-        position: relative;
-        display: flex;
-        align-items: center;
-  
-        text-align: left;
-        margin: 0;
-        padding: 0;
-        min-height: 0;
-        margin-bottom: -3px;
-  
-        pointer-events: auto;
-        transition: border-radius .4s;
-
-        background-color: transparent;
-        overflow: hidden;
-        padding: 15px 5px;
-
-        .c-rouge;
-        font-weight: 400;
-        font-style: italic;
-
-        transition: color .2s;
-
-        span {
-          display: block;
-          text-transform: initial;
-          width: 100%;
-
-          .text-ellipsis;
-
-          @c-outerText: #fff;
-            
-          text-shadow: 1px 1px @c-outerText, -1px 1px @c-outerText, -1px -1px @c-outerText, 1px -1px @c-outerText;
-          background-image: linear-gradient(90deg, currentColor 100%, transparent 100%);
-          background-position: bottom 0.12em left;
-          background-repeat: no-repeat;
-          background-size: 0% 2px;   
-          
-          transition: all .4s ease-out;
-        }
-
-        &:not(:first-child) {
-          padding-left: 0;
-          &::before {
-            content: '/';
-            .padding-sides-small;
-            font-weight: 200;
-          }
-        }
-
-        &:not(:last-child) {
-          span {
-            background-size: 100% 2px;   
-          }
-        }
-
-        &:nth-child(1) {
-          flex-shrink: 0;
-        }
-        &:nth-child(2) {
-          color: @c-orange;
-        }
-  
-      }
-
-    }  
-
     .m_topbar--left--menuButton {
       display: block;
       margin-left: auto;      
@@ -334,9 +263,29 @@ body {
     }
   }    
   .m_topbar--center {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background-color: #000;
+      border-radius: 50%;
+    }
+
+
+    &::before {
+      left: 0;
+    }
+
+    &::after {
+      right: 0;
+    }
 
     .m_topbar--center--authors {
       button {
@@ -385,9 +334,17 @@ body {
       }
 
     }
-
   }
+
+  .m_topbar--center {
+    height: 4px;
+    width: 100%;
+    background-color: #000;
+  }
+
   .m_topbar--right {
+    margin:0 @t-skipline/2;
+    font-size: 2rem;
     .m_topbar--right--pictos {
       .flex-wrap;
       justify-content: flex-end;
@@ -413,6 +370,11 @@ body {
           fill: @c-gris;
         }
       }
+    }
+
+    .m_topbar--right--projectName {
+      text-align: right;
+
     }
   }
   
@@ -700,7 +662,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  // height: ~"calc(100vh - @{t-hauteur_topbar} - 1px)";
+  height: ~"calc(100vh - 90px)";
 
   // body.has_systembar & {
   //   height: ~"calc(100vh - @{t-systemBarHeight}*0.666 - @{t-hauteur_topbar} - 1px)";
@@ -902,12 +864,13 @@ body {
     z-index: 0;
     flex: 0 1 @t-folderwidth;
     min-width: @t-folderwidth;
-    max-width: @t-folderwidth;
 
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row wrap;
     justify-items: center;
     align-items: stretch;    
+
+    border: 4px solid black;
 
     @media screen and (max-width: 50rem) {
       flex-basis: auto;
@@ -918,15 +881,14 @@ body {
       position: relative;
       width:100%;
       overflow: hidden;
-      height: 0;
-      padding-bottom: 66%;
+      max-width: @t-folderwidth;
       .bg-gris_clair;
 
       img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        // position: absolute;
+        // width: 100%;
+        // height: 100%;
+        // object-fit: cover;
       }
 
     }
@@ -1039,7 +1001,6 @@ body {
   .margin-small;
   margin-left: 0;      
   margin-top: 0;
-  min-height: 0;
   text-align: left;
 
 
@@ -2528,7 +2489,7 @@ body {
   position: relative;
   // .margin-vert-medium;
   .bg-blanc;
-  box-shadow: 0px 2px 16px 0px rgba(0,0,0,.2);
+  border:4px solid black;
   z-index: 0;
   transform-origin: top left;
 
@@ -2539,6 +2500,8 @@ body {
   width: 1200px;
   height: 3000px;
   margin: 0 auto;
+
+  box
 
   transition: all .2s;
 
@@ -2797,8 +2760,8 @@ body {
 
 .m_layerOptions {
   position: fixed;
-  left: 10vw;
-  bottom: 0;
+  left: 50px;
+  bottom: 50px;
   z-index: 10;
 
   width: 220px;
@@ -2806,7 +2769,13 @@ body {
   padding: 20px;
   background-color: white;
   border: 4px solid #000;
-  border-bottom: 0;
+  // border-bottom: 0;
+
+
+  button {
+    border: 4px solid #000;
+    .font-verysmall;
+  }
 
 }
 

@@ -10,6 +10,12 @@
         :withTitleBar="true"
       >
       </SystemBar>
+
+      <TopBar
+        :has_back_button="$root.do_navigation.view !== 'ListView'"
+        :slugProjectName="$root.do_navigation.current_slugProjectName"
+        :project="$root.currentProject"
+      />
       
       <div class="m_activitiesPanel">
         <div 
@@ -62,6 +68,7 @@ export default {
   name: 'app',
   components: {
     SystemBar,
+    TopBar,
     ListView,
     ProjectView,
     EditMedia

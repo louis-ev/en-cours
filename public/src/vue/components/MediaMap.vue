@@ -69,6 +69,7 @@
 
       <button 
         v-if="can_admin_folder"
+        type="button" 
         class="barButton barButton_text" 
         :class="{ 'is--active' : !preview_mode }"
         @click="preview_mode = !preview_mode"

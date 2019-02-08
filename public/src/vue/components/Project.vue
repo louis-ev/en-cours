@@ -45,7 +45,7 @@
               </span>
             </div>
           </div>
-          <div class="m_metaField">
+          <!-- <div class="m_metaField">
             <div>
               {{ $t('created') }}
             </div>
@@ -60,7 +60,7 @@
             <div>
               {{ $root.formatDateToHuman(project.date_modified) }}
             </div>
-          </div>
+          </div> -->
           <div class="m_metaField" v-if="project.password === 'has_pass'">
             <small class="m_project--presentation--text--infos--password c-rouge" v-if="project.password === 'has_pass'">
               <label>{{ $t('protected_by_pass') }}</label>

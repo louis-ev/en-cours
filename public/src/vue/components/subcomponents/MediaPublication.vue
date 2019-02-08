@@ -275,7 +275,11 @@ export default {
     },
     
     removePubliMedia() {
-      this.$emit('removePubliMedia', { slugMediaName });
+      this.$root.removeMedia({ 
+        type: this.type,
+        slugFolderName: this.slugFolderName, 
+        slugMediaName: this.metaFileName
+      });
     },
     resizeMedia(type, origin) {
       if (this.$root.state.dev_mode === 'debug') {

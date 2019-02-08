@@ -18,7 +18,7 @@
   > 
     <MediaContent
       :context="preview_mode ? 'publication' : 'preview'"
-      :slugFolderName="media.slugProjectName"
+      :slugFolderName="slugFolderName"
       :media="media"
       :read_only="read_only"
       :preview_size="800"
@@ -26,7 +26,7 @@
     />
 
     <div 
-      v-if="(is_selected || is_hovered || is_touch) && !preview_mode" 
+      v-if="!preview_mode" 
       class="controlFrame"
       @mousedown.stop.prevent="dragMedia('mouse')"
       @touchstart.stop.prevent="dragMedia('touch')"   

@@ -65,8 +65,22 @@
       </template>
     </div> -->
 
+    <div class="m_layerOptions">
+      <button 
+        v-if="can_admin_folder"
+        class="button_editmode margin-vert-verysmall font-verysmall" 
+        :class="{ 'is--active' : !preview_mode }"
+        @click="preview_mode = !preview_mode"
+      >
+        mode édition
+      </button>
+
+    </div>
+
+
     <div class="m_mediamap">
       <div 
+        v-if="!preview_mode"
         class="m_mediamap--grid"
         :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
       />
@@ -78,7 +92,7 @@
         <MediaPublication
           :page="page"
           :media="media"
-          :preview_mode="!can_admin_folder"
+          :preview_mode="preview_mode"
           :read_only="read_only"
           :pixelsPerMillimeters="1"
           :slugFolderName="slugProjectName"
@@ -89,7 +103,8 @@
           @unselected="noSelection"
         />
       </div>
-    </div>    
+    </div>  
+
   </div>    
 </template>
 <script>
@@ -129,6 +144,7 @@ export default {
         gridstep: 50
       },
       has_media_selected: false,
+      preview_mode: !this.can_admin_folder
     }
   },
   mounted() {

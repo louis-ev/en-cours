@@ -4,7 +4,7 @@
   "port": 8080,
   "http_port": 80,
   "userDirPath": "documents",
-  "userDirname": "inprogress",
+  "userDirname": "en-cours",
 
   "contentDirname" : "user",
   "cacheDirname" : "cache",

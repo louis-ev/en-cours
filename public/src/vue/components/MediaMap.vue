@@ -142,7 +142,7 @@ export default {
         margin_top: 0,
         margin_bottom: 0,
         width: 1200,
-        height: 3000,
+        height: 10000,
         gridstep: 50
       },
       has_media_selected: false,

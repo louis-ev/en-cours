@@ -49,7 +49,7 @@ module.exports = function(app) {
 
       let pageData = {};
 
-      pageData.pageTitle = 'inprogress';
+      pageData.pageTitle = 'en cours';
       // full path on the storage space, as displayed in the footer
       pageData.folderPath = api.getFolderPath();
       pageData.slugProjectName = '';

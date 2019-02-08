@@ -1,6 +1,11 @@
 <template>
   <div class="">
-    <div class="m_actionbar--buttonBar" v-show="$root.state.connected">
+
+    <div class="m_projectAuthor" v-if="typeof project.authors === 'string'">
+      {{ project.authors }}
+    </div>
+
+    <!-- <div class="m_actionbar--buttonBar" v-show="$root.state.connected">
 
       <button 
         class="backButton text-ellipsis" 
@@ -10,7 +15,7 @@
       >
         retour
       </button>
-    </div>
+    </div> -->
 
     <!-- <div class="m_actionbar--text">
       {{ $t('showing') }} 
@@ -40,6 +45,7 @@
         />
       </template>
     </div> -->
+
 
     <div class="m_layerOptions">
       <div class="m_metaField" v-if="project.password === 'has_pass'">
@@ -101,6 +107,24 @@
         :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
       />
 
+      <div class="m_mediamap--buttons">
+        <button v-if="can_admin_folder" type="button" class="buttonLink" @click="showEditProjectModal = true" :disabled="read_only">
+          {{ $t('edit') }}
+        </button>
+        <button v-if="can_admin_folder" type="button" class="buttonLink" @click="removeProject()" :disabled="read_only">
+          {{ $t('remove') }}
+        </button>
+      </div>
+
+      <EditProject
+        v-if="showEditProjectModal"
+        :project="project"
+        :slugProjectName="slugProjectName"
+        @close="showEditProjectModal = false"
+        :read_only="read_only"
+      />
+
+
       <div
         v-for="media in sortedMedias" 
         :key="media.slugMediaName"
@@ -128,6 +152,7 @@ import UploadFile from './modals/UploadFile.vue';
 import MediaPublication from './subcomponents/MediaPublication.vue';
 import TagsAndAuthorFilters from './subcomponents/TagsAndAuthorFilters.vue';
 import { setTimeout } from 'timers';
+import EditProject from './modals/EditProject.vue';
 
 export default {
   props: {
@@ -139,6 +164,7 @@ export default {
   components: {
     MediaPublication,
     UploadFile,
+    EditProject,
     TagsAndAuthorFilters
   },
   data() {
@@ -150,6 +176,7 @@ export default {
       },
       showImportModal: false,
       show_filters: false,
+      showEditProjectModal: false,
       page: {
         margin_left: 0,
         margin_right: 0,
@@ -342,6 +369,18 @@ export default {
     noSelection() {
       this.has_media_selected = false;
     },
+    removeProject() {
+      if (window.confirm(this.$t('sureToRemoveProject'))) {
+        this.$root.removeFolder({ 
+          type: 'projects', 
+          slugFolderName: this.slugProjectName
+        });
+        this.closeProject();
+      }
+    },
+    closeProject() {
+      this.$root.closeProject();
+    }
   }
 }
 </script>

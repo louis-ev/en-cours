@@ -388,6 +388,11 @@ body {
   }
 }
 
+.m_projectAuthor {
+  text-align: right;
+  font-size: 2rem;
+}
+
 .m_authorsList {
   display: flex;
   flex-flow: row wrap;
@@ -875,7 +880,7 @@ body {
     justify-items: center;
     align-items: stretch;    
 
-    border: 4px solid black;
+    // border: 4px solid black;
 
     @media screen and (max-width: 50rem) {
       flex-basis: auto;
@@ -2488,10 +2493,12 @@ body {
 }
 
 
+
 .m_mediamap {
   position: relative;
   // .margin-vert-medium;
   .bg-blanc;
+  background-color: #FAFDFD;
   border:4px solid black;
   z-index: 0;
   transform-origin: top left;
@@ -2499,14 +2506,32 @@ body {
   // print only options 
   font-variant-ligatures: none;
   color: #000;
+  
 
   width: 1200px;
   height: 10000px;
   margin: 0 auto;
-
-  box
+  margin-top: 25px;
 
   transition: all .2s;
+
+  .m_mediamap--buttons {
+    position: absolute;
+    right: 0;
+    z-index: 10000;
+    top: -22px;
+
+    > button {
+      background-color: #fff;
+      text-decoration: none;
+      padding-left: @t-skipline/2;
+      padding-right: @t-skipline/2;
+
+      &::after {
+        border-bottom: none;
+      }
+    }
+  }
 
   .m_mediamap--header {
     position: absolute;
@@ -2769,8 +2794,8 @@ body {
   width: 220px;
 
   padding: 20px;
-  background-color: white;
-  border: 4px solid #000;
+  // background-color: white;
+  // border: 4px solid #000;
   // border-bottom: 0;
 
 

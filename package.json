@@ -1,5 +1,5 @@
 {
-  "name": "inprogress",
+  "name": "encours",
   "productName": "ensad_workshop",
   "version": "0.0.1-dev",
   "description": "",
@@ -32,8 +32,8 @@
   },
   "build": {
     "electronVersion": "2.0.16",
-    "appId": "inprogress",
-    "productName": "inprogress",
+    "appId": "encours",
+    "productName": "encours",
     "asar": false,
     "mac": {
       "category": "public.app-category.education"

@@ -2,7 +2,7 @@
   <div class="m_project"
     :class="{ 'is--not_authorized_to_admin' : !can_admin_folder }"
   >
-    <div class="m_project--presentation">
+    <div class="m_project--presentation" v-if="context !== 'full'">
       <div v-if="previewURL" class="m_project--presentation--vignette" @click="$root.openProject(slugProjectName)">
         <img
           :src="previewURL" class=""
@@ -64,23 +64,6 @@
         </div>
       </div>
 
-      <div 
-        class="m_project--presentation--buttons"
-      >
-        <button v-if="can_admin_folder && context === 'full'" type="button" class="buttonLink" @click="showEditProjectModal = true" :disabled="read_only">
-          {{ $t('edit') }}
-        </button>
-        <button v-if="can_admin_folder && context === 'full'" type="button" class="buttonLink" @click="removeProject()" :disabled="read_only">
-          {{ $t('remove') }}
-        </button>
-      </div>
-      <EditProject
-        v-if="showEditProjectModal"
-        :project="project"
-        :slugProjectName="slugProjectName"
-        @close="showEditProjectModal = false"
-        :read_only="read_only"
-      />
     </div>
 
     <MediaMap
@@ -94,7 +77,6 @@
   </div>
 </template>
 <script>
-import EditProject from './modals/EditProject.vue';
 import MediaMap from './MediaMap.vue';
 import MediaCard from './subcomponents/MediaCard.vue';
 
@@ -108,7 +90,6 @@ export default {
   },
   components: {
     MediaMap,
-    EditProject,
     MediaCard
   },
   data() {
@@ -144,18 +125,6 @@ export default {
     openProject() {
       this.$root.openProject(this.slugProjectName);
     },
-    closeProject() {
-      this.$root.closeProject();
-    },
-    removeProject() {
-      if (window.confirm(this.$t('sureToRemoveProject'))) {
-        this.$root.removeFolder({ 
-          type: 'projects', 
-          slugFolderName: this.slugProjectName
-        });
-        this.closeProject();
-      }
-    }
   },
 };
 </script>

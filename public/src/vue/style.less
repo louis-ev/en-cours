@@ -14,6 +14,10 @@
 @import "less/_media";
 @import "less/_modal";
 
+@c-active_color: rgb(64,52,255);
+
+
+
 ::-moz-selection {
   background: rgba(151, 151, 151,0.25);
 }
@@ -285,6 +289,12 @@ body {
 
     &::after {
       right: 0;
+    }
+
+    &:not(.has--menu_open) {
+      &::after {
+        display: none;
+      }
     }
 
     .m_topbar--center--authors {
@@ -867,7 +877,7 @@ body {
 
 
 .m_project {
-  background-color: fade(#fff, 95%);
+  background-color: fade(#fff, 100%);
   
   .m_project--presentation {
     position: relative;
@@ -900,13 +910,19 @@ body {
         // height: 100%;
         // object-fit: cover;
       }
+    }
 
+    .m_authorField {
+      button {
+        padding: 0;
+      }
     }
 
     .m_project--presentation--text {
       .m_project--presentation--text--title {
         .margin-none;
         .padding-sides-medium;
+        padding-left: 0;
         .padding-vert-small;
         .padding-bottom-verysmall;
         .font-folder_title;
@@ -914,6 +930,7 @@ body {
 
       .m_project--presentation--text--infos {
         .margin-sides-medium;
+        margin-left: 0;
       }
     }
 
@@ -1062,7 +1079,7 @@ body {
 
   &.barButton_createProject {
     color: white;
-    background-color: @c-rouge;
+    background-color: @c-active_color;
 
     .m_activitiesPanel--do:not(.is--large) & {
       .margin-small;
@@ -1335,7 +1352,7 @@ body {
   }
 
   a {
-    color: #6E00F3 !important;
+    color: @c-active_color !important;
     // text-decoration: none !important;
     // border-bottom: 2px solid currentColor;
   }
@@ -1409,7 +1426,6 @@ body {
       color: @c-bleumarine_fonce !important;
     }
   &::before {
-      content: url("data:image/svg+xml;charset=UTF-8, <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='15' width='15' class='svg-icon' viewBox='0 0 20 20'><path stroke='#000000' stroke-width='.5' d='M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z'></path></svg>");
       display: inline-block;
       vertical-align: baseline;
       width: 20px;
@@ -1513,15 +1529,16 @@ body {
     }
 
     &.tagcolorid_0 {
-      background-color: @c-bleuvert_clair !important;
+      background-color: rgb(233,212,185) !important;
       &.is--active {
       }
     }
     &.tagcolorid_1 {
-      background-color: @c-rouge_clair !important;
+      background-color: rgb(88,89,92) !important;
+      color: white !important;
     }
     &.tagcolorid_2 {
-      background-color: @c-orange_clair !important;
+      background-color: rgb(178, 188, 195) !important;
     }
 
     &::before {
@@ -2132,7 +2149,7 @@ body {
     position: absolute;
     z-index: 2;
     top: 0;left: 0;bottom: 0;right: 0;
-    background-color: fade(#fff, 90%);
+    background-color: fade(#fff, 0%);
     display: flex;
     justify-content: center;
     align-items: center;    
@@ -2510,8 +2527,7 @@ body {
 
   width: 1200px;
   height: 10000px;
-  margin: 0 auto;
-  margin-top: 25px;
+  margin: 25px auto;
 
   transition: all .2s;
 
@@ -2531,6 +2547,15 @@ body {
         border-bottom: none;
       }
     }
+  }
+
+  .m_mediamap--back {
+    cursor: pointer;
+    position: absolute;
+    top: -7px;
+    left: -16px;
+    height: 55px;
+    background-color: #fff;
   }
 
   .m_mediamap--header {
@@ -2684,10 +2709,10 @@ body {
     cursor: -moz-grab;
   
     .is--hovered& {
-      color: #6E00F3;
+      color: @c-active_color;
     }
     .is--dragged& {
-      color: #6E00F3;
+      color: @c-active_color;
       cursor: -webkit-grabbing;
       cursor: -moz-grabbing;
     }
@@ -2731,7 +2756,7 @@ body {
 
       transition: transform .2s;
       &:hover {
-        color: #6E00F3;
+        color: @c-active_color;
         // transform: scale(1.2); 
       }      
       
@@ -2744,7 +2769,7 @@ body {
 
       transition: transform .2s;
       &:hover {
-        color: #6E00F3;
+        color: @c-active_color;
         // transform: scale(1.2); 
       }      
     }  
@@ -2775,7 +2800,7 @@ body {
       display: block;
       color: inherit;
       background-color: white;
-      color: #6E00F3;
+      color: @c-active_color;
       font-weight: bold;
       pointer-events: auto;
       .margin-verysmall;

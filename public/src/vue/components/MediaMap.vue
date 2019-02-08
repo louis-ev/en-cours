@@ -4,7 +4,6 @@
     <div class="m_projectAuthor" v-if="typeof project.authors === 'string'">
       {{ project.authors }}
     </div>
-
     <!-- <div class="m_actionbar--buttonBar" v-show="$root.state.connected">
 
       <button 
@@ -115,6 +114,16 @@
           {{ $t('remove') }}
         </button>
       </div>
+
+      <div class="m_mediamap--back" @click="closeProject">
+        <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="64px" height="64px"
+          viewBox="0 0 595.28 841.89" style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
+        <polygon points="44.17,42.51 28.59,57.07 28.59,289.94 36.38,304.49 59.76,326.32 67.55,326.32 75.34,319.05 75.34,122.55 
+          83.14,122.55 402.61,420.94 410.4,420.94 433.78,399.1 433.78,391.83 114.31,93.45 114.31,86.17 324.7,86.17 332.48,78.89 
+          332.48,71.62 309.11,49.78 293.53,42.51 "/>
+        </svg>
+      </div>
+
 
       <EditProject
         v-if="showEditProjectModal"
@@ -333,9 +342,14 @@ export default {
         slugFolderName: this.slugProjectName,
         type: 'projects',
         additionalMeta: {
-          type: 'text'
+          type: 'text',
+          x: Math.round(Math.random() * 5) * 40,
+          y: Math.round(Math.random() * 5) * 40,
+          width: 200,
+          height: 200
         }
       });
+      this.preview_mode = false;
     },
     submitPassword() {
       console.log('METHODS • Project: submitPassword');

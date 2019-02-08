@@ -29,7 +29,9 @@
       -->
     </div>
 
-    <div class="m_topbar--center">
+    <div class="m_topbar--center"
+      :class="{ 'has--menu_open' : $root.do_navigation.view === 'ProjectView' }"
+    >
 
     </div>
 

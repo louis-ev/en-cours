@@ -21,7 +21,7 @@
       :slugFolderName="media.slugProjectName"
       :media="media"
       :read_only="read_only"
-      :preview_size="360"
+      :preview_size="800"
       v-model="media.content"
     />
 

@@ -838,6 +838,11 @@ body {
     .margin-sides-small;
     .margin-bottom-medium;
     z-index: 1;
+
+    .m_project--presentation {
+      max-width: @t-folderwidth;
+
+    }
   }
 
   .m_project {
@@ -1417,7 +1422,6 @@ body {
   flex-flow: row wrap;
   text-transform: initial;
 
-  font-family: 'Fira Mono';
   font-weight: 400;
 
   > .input {
@@ -2451,7 +2455,6 @@ body {
         color: @c-rouge;
         border-right: 5px solid currentColor;
 
-        font-family: 'Fira Mono';
         font-weight: 500;
 
         font-size: 4em;
@@ -2724,7 +2727,6 @@ body {
 
 
   .m_mediaPublication--caption {
-    font-family: 'Fira Mono';
     font-size: 10pt;
     margin-top: 0.5em;    
     white-space: pre-wrap;   
@@ -2775,6 +2777,10 @@ body {
   button {
     border: 4px solid #000;
     .font-verysmall;
+  }
+
+  > button:last-child {
+    margin-bottom: 0;
   }
 
 }

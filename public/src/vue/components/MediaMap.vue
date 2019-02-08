@@ -42,6 +42,21 @@
     </div> -->
 
     <div class="m_layerOptions">
+      <div class="m_metaField" v-if="project.password === 'has_pass'">
+        <small class="m_project--presentation--text--infos--password c-rouge" v-if="project.password === 'has_pass'">
+          <label>{{ $t('protected_by_pass') }}</label>
+        </small>
+
+        <button v-if="!can_admin_folder" type="button" class="buttonLink" :readonly="read_only" @click="showInputPasswordField = !showInputPasswordField">
+          {{ $t('password') }}
+        </button>
+
+        <div v-if="showInputPasswordField && !can_admin_folder" class="margin-bottom-small">
+          <input type="password" ref="passwordField" @keyup.enter="submitPassword" autofocus placeholder="…">
+          <button type="button" class="button button-bg_rounded bg-bleuvert" @click="submitPassword">Envoyer</button>
+        </div>
+      </div>
+
 
       <button type="button" class="barButton barButton_import" 
         v-if="can_admin_folder"
@@ -82,7 +97,6 @@
 
     <div class="m_mediamap">
       <div 
-        v-if="!preview_mode"
         class="m_mediamap--grid"
         :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
       />
@@ -146,7 +160,8 @@ export default {
         gridstep: 50
       },
       has_media_selected: false,
-      preview_mode: true
+      preview_mode: true,
+      showInputPasswordField: false
     }
   },
   mounted() {
@@ -294,6 +309,15 @@ export default {
           type: 'text'
         }
       });
+    },
+    submitPassword() {
+      console.log('METHODS • Project: submitPassword');
+      this.$auth.updateAdminAccess({
+        "projects": {
+          [this.slugProjectName]: this.$refs.passwordField.value
+        }
+      });
+      this.$socketio.sendAuth();
     },
     newTextMediaCreated(mdata) {
       if (this.$root.justCreatedMediaID === mdata.id) {

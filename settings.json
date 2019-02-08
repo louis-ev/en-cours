@@ -109,20 +109,19 @@
             "type": "string"
           },
           "x": {
-            "type": "number",
-            "default": "random",
-            "clip": {
-              "min": 0,
-              "max": 1
-            }
+            "type": "number"
           },
           "y": {
-            "type": "number",
-            "default": "random",
-            "clip": {
-              "min": 0,
-              "max": 1
-            }
+            "type": "number"
+          },
+          "rotate": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
           },
           "public": {
             "type": "boolean",

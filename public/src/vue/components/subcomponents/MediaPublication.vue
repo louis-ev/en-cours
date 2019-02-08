@@ -24,7 +24,7 @@
       :preview_size="360"
       v-model="media.content"
     />
-    <p class="mediaCaption">{{ media.caption }}</p>
+    {{ mediaPos.x }}
 
     <div 
       v-if="(is_selected || is_hovered || is_touch) && !preview_mode" 
@@ -51,11 +51,10 @@
         </g>
         </svg>
       </div>
-      <div class="handle handle_rotateMedia"
+      <!-- <div class="handle handle_rotateMedia"
         @mousedown.stop.prevent="rotateMedia('mouse', 'bottomright')"
         @touchstart.stop.prevent="rotateMedia('touch', 'bottomright')"
       >
-<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In  -->
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="98.7px"
 	 height="132.2px" viewBox="0 0 98.7 132.2" style="enable-background:new 0 0 98.7 132.2;" xml:space="preserve">
 <defs>
@@ -66,7 +65,7 @@
 	c0.3-2,0.6-4.5,0.8-7.7l0.7-10.5l-14-0.4L43.7,128l45.5,4.2l1.3-13.9L80.1,117.7z"/>
 </svg>
 
-      </div>
+      </div> -->
     </div>
 
     <div 
@@ -81,14 +80,14 @@
       >
         {{ $t('style') }}
       </button> -->
-      <button 
+      <!-- <button 
         type="button" 
         class="buttonLink" 
         @click.prevent.stop="$root.openMedia({ slugProjectName: media.slugProjectName, metaFileName: media.metaFileName })"
         @touchstart.prevent.stop="$root.openMedia({ slugProjectName: media.slugProjectName, metaFileName: media.metaFileName })"
       >
         {{ $t('edit') }}
-      </button>
+      </button> -->
       <button 
         type="button" 
         class="buttonLink" 
@@ -110,6 +109,9 @@ export default {
     read_only: Boolean,
     preview_mode: Boolean,
     pixelsPerMillimeters: Number,
+    slugFolderName: String,
+    type: String,
+    metaFileName: String
   },
   components: {
     MediaContent
@@ -124,7 +126,7 @@ export default {
       is_selected: false,
       is_touch: Modernizr.touchevents,
 
-      limit_media_to_page: false,
+      limit_media_to_page: true,
 
       mediaID: `${(Math.random().toString(36) + '00000000000000000').slice(2, 3 + 5)}`,
 
@@ -176,7 +178,7 @@ export default {
   },
 
   watch: {
-    'media.publi_meta': { 
+    'media': { 
       handler: function() {
         this.updateMediaStyles();
       },
@@ -199,31 +201,35 @@ export default {
   computed: {
     mediaStyles() {
       return `
-        transform: translate(${this.mediaPos.x}mm, ${this.mediaPos.y}mm) rotate(${this.rotate}deg);
-        width: ${this.mediaSize.width}mm;
-        height: ${this.mediaSize.height}mm;
-        ${this.media.publi_meta.custom_css}
+        transform: translate(${this.mediaPos.x}px, ${this.mediaPos.y}px) rotate(${this.rotate}deg);
+        width: ${this.mediaSize.width}px;
+        height: ${this.mediaSize.height}px;
       `
       ;
     },
   },
   methods: {
     toggleEditWindow() {
-      this.$eventHub.$emit('publication.setCSSEditWindow', this.media.publi_meta.metaFileName);
+      this.$eventHub.$emit('publication.setCSSEditWindow', this.media.metaFileName);
     },
 
     updateMediaStyles() {
-      this.mediaPos.x = this.media.publi_meta.hasOwnProperty('x') && !!Number.parseInt(this.media.publi_meta.x) ? this.limitMediaXPos(Number.parseInt(this.media.publi_meta.x)) : this.page.margin_left;
-      this.mediaPos.y = this.media.publi_meta.hasOwnProperty('y') && !!Number.parseInt(this.media.publi_meta.y) ? this.limitMediaYPos(Number.parseInt(this.media.publi_meta.y)) : this.page.margin_top;
-      this.rotate = this.media.publi_meta.hasOwnProperty('rotate') ? this.media.publi_meta.rotate : 0;
-      this.mediaSize.width = this.media.publi_meta.hasOwnProperty('width') && !!Number.parseInt(this.media.publi_meta.width) ? this.limitMediaWidth(Number.parseInt(this.media.publi_meta.width)) : 100;
-      this.mediaSize.height = this.media.publi_meta.hasOwnProperty('height') && !!Number.parseInt(this.media.publi_meta.height) ? this.limitMediaHeight(Number.parseInt(this.media.publi_meta.height)) : 100;
+      this.mediaPos.x = this.media.hasOwnProperty('x') && !!Number.parseInt(this.media.x) ? this.limitMediaXPos(Number.parseInt(this.media.x)) : this.page.margin_left;
+      this.mediaPos.y = this.media.hasOwnProperty('y') && !!Number.parseInt(this.media.y) ? this.limitMediaYPos(Number.parseInt(this.media.y)) : this.page.margin_top;
+      this.rotate = this.media.hasOwnProperty('rotate') ? this.media.rotate : 0;
+      this.mediaSize.width = this.media.hasOwnProperty('width') && !!Number.parseInt(this.media.width) ? this.limitMediaWidth(Number.parseInt(this.media.width)) : 100;
+      this.mediaSize.height = this.media.hasOwnProperty('height') && !!Number.parseInt(this.media.height) ? this.limitMediaHeight(Number.parseInt(this.media.height)) : 100;
     },
     updateMediaPubliMeta(val) {
       if (this.$root.state.dev_mode === 'debug') {
         console.log(`METHODS • MediaPublication: updateMediaPubliMeta`);
       }
-      this.$emit('editPubliMedia', { slugMediaName: this.media.publi_meta.metaFileName, val });
+      this.$root.editMedia({ 
+        type: this.type,
+        slugFolderName: this.slugFolderName, 
+        slugMediaName: this.metaFileName,
+        data: val
+      });
     },
     limitMediaXPos(xPos) {
       if(!this.limit_media_to_page) {
@@ -270,7 +276,7 @@ export default {
     },
     
     removePubliMedia() {
-      this.$emit('removePubliMedia', { slugMediaName: this.media.publi_meta.metaFileName });
+      this.$emit('removePubliMedia', { slugMediaName });
     },
     resizeMedia(type, origin) {
       if (this.$root.state.dev_mode === 'debug') {
@@ -459,6 +465,7 @@ export default {
       if (this.is_dragged) {
         this.mediaPos.x = this.roundMediaVal(this.mediaPos.x - this.page.margin_left) + this.page.margin_left;
         this.mediaPos.y = this.roundMediaVal(this.mediaPos.y - this.page.margin_top) + this.page.margin_top;
+
 
         this.updateMediaPubliMeta({ 
           x: this.mediaPos.x,

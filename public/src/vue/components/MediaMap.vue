@@ -73,20 +73,32 @@
       class="m_project--mediamap"
       name="list-complete"
     >
-      <MediaCard
-        v-for="media in sortedMedias"
+      <div
+        v-for="media in sortedMedias" 
         :key="media.slugMediaName"
-        :media="media"
-        :metaFileName="media.metaFileName"
-        :slugProjectName="slugProjectName"
-      />
+      >
+        <MediaPublication
+          :page="page"
+          :media="media"
+          :preview_mode="!can_admin_folder"
+          :read_only="read_only"
+          :pixelsPerMillimeters="1"
+          :slugFolderName="slugProjectName"
+          :metaFileName="media.metaFileName"
+          :type="'projects'"
+          @removePubliMedia="values => { removeMedia(values) }"
+          @selected="newSelection"
+          @unselected="noSelection"
+        />
+      </div>
+
     </transition-group>
     
   </div>    
 </template>
 <script>
 import UploadFile from './modals/UploadFile.vue';
-import MediaCard from './subcomponents/MediaCard.vue';
+import MediaPublication from './subcomponents/MediaPublication.vue';
 import TagsAndAuthorFilters from './subcomponents/TagsAndAuthorFilters.vue';
 import { setTimeout } from 'timers';
 
@@ -98,7 +110,7 @@ export default {
     can_admin_folder: Boolean
   },
   components: {
-    MediaCard,
+    MediaPublication,
     UploadFile,
     TagsAndAuthorFilters
   },
@@ -110,7 +122,17 @@ export default {
         order: 'descending'
       },
       showImportModal: false,
-      show_filters: false
+      show_filters: false,
+      page: {
+        margin_left: 0,
+        margin_right: 0,
+        margin_top: 0,
+        margin_bottom: 0,
+        width: 1200,
+        height: 3000,
+        gridstep: 20
+      },
+      has_media_selected: false,
     }
   },
   mounted() {
@@ -265,7 +287,23 @@ export default {
         this.$eventHub.$off('socketio.media_created_or_updated', this.newTextMediaCreated);
         this.openMediaModal(mdata.metaFileName);
       }
-    }
+    },
+    removeMedia(values) {
+      if (this.$root.state.dev_mode === 'debug') {
+        console.log('METHODS • MediaCard: removeMedia');
+      }
+      debugger;
+      if (window.confirm(this.$t('sureToRemoveMedia'))) {
+        this.$root.removeMedia(this.slugProjectName, this.metaFileName);
+      }
+    },
+    newSelection(mediaID) {
+      this.has_media_selected = true;
+      this.$emit('newMediaSelected', mediaID);
+    },
+    noSelection() {
+      this.has_media_selected = false;
+    },
   }
 }
 </script>

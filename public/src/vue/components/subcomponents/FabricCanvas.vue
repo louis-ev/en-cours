@@ -4,9 +4,6 @@
   </div>
 </template>
 <script>
-import 'fabric'
-
-
 export default {
   props: {
     medias: Array,
@@ -32,8 +29,6 @@ export default {
 
     this.canvas = new fabric.Canvas(this.$refs.canvas);
 
-    debugger;
-
     this.setDrawingOptions();
 
     if(this.project.hasOwnProperty('canvas_information') && this.project.canvas_information !== '') {
@@ -52,7 +47,9 @@ export default {
           stroke: this.drawing_options.color,
           strokeWidth:  this.drawing_options.width,
           originX: 'center',
-          originY: 'center'
+          originY: 'center',
+          transparentCorners: false,
+          cornerStyle2: true
         });
         this.canvas.add(this.new_line);
 
@@ -75,8 +72,12 @@ export default {
       this.isDown = false;
       if(!this.drawing_options.select_mode){
         this.new_line.setCoords();
+        this.updateLinksList();
       }
-      this.updateLinksList();
+
+      if(o.target.type === 'line') {
+        this.updateLinksList();
+      }
     });    
     // this.setMedias();
   },
@@ -105,7 +106,6 @@ export default {
         o.evented = this.drawing_options.select_mode;
       });
       if(!this.drawing_options.select_mode) {
-        debugger;
         this.canvas.cursor = 'crosshair';
       }
 

@@ -248,7 +248,7 @@ export default {
       showInputPasswordField: false,
       drawing_options: {
         width: 4,
-        select_mode: true,
+        select_mode: false,
         color: '#4034FF'
       }
     }

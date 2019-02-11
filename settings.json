@@ -63,6 +63,9 @@
         },      
         "description": {
           "type": "string"
+        },
+        "canvas_information": {
+          "type": "string"
         }
       },
       "medias": {

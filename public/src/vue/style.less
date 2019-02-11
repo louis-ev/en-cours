@@ -14,9 +14,11 @@
 @import "less/_media";
 @import "less/_modal";
 
-@c-active_color: rgb(64,52,255);
+@c-active_color: #4034FF;
 
-
+:root {
+  --input-border-color-focus:  @c-active_color;
+}
 
 ::-moz-selection {
   background: rgba(151, 151, 151,0.25);
@@ -2517,7 +2519,7 @@ body {
   // .margin-vert-medium;
   .bg-blanc;
   background-color: #FAFDFD;
-  border:4px solid black;
+  outline:4px solid black;
   z-index: 0;
   transform-origin: top left;
 
@@ -2527,7 +2529,7 @@ body {
   
 
   width: 1200px;
-  height: 10000px;
+  height: 5000px;
   margin: 25px auto;
 
   transition: all .2s;
@@ -2645,8 +2647,16 @@ body {
 
     pointer-events: none;
   }
+
+  canvas {
+    position: relative;
+    z-index: 100;
+  }
 }  
 
+.is--clickthrough {
+  pointer-events: none;
+}
 
 .m_mediaPublication {
   position: absolute;
@@ -2665,17 +2675,18 @@ body {
   }
   &.is--dragged, &.is--rotated {
     transition: none ease-out;
-    z-index: 2;
+    // z-index: 2;
   }
   &.is--resized {
     transition: none ease-out;
-    z-index: 2;
+    // z-index: 2;
   }
 
   .mediaContainer {
     overflow: hidden;
     height: 100%;
     width: 100%;
+    border-radius: 4px;
 
     > * {
       object-fit: cover;
@@ -2683,11 +2694,9 @@ body {
       width: 100%;
       height: 100%;
     }
-
-    &[data-media_type="text"] {
-      z-index: 150;
-    }
-
+  }
+  &[data-media_type="text"] {
+    z-index: 2;
   }
 
   .controlFrame {
@@ -3086,7 +3095,7 @@ body {
       // background-position-y: ~"calc(@{t-skipline} * 0.85)";
 
       &:focus {
-        border-left-color: @c-orange;
+        border-left-color: var(--input-border-color-focus);
         background-color: white;
       }
 

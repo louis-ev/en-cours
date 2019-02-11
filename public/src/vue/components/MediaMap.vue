@@ -4,6 +4,7 @@
     <div class="m_projectAuthor" v-if="typeof project.authors === 'string'">
       {{ project.authors }}
     </div>
+
     <!-- <div class="m_actionbar--buttonBar" v-show="$root.state.connected">
 
       <button 
@@ -62,40 +63,75 @@
         </div>
       </div>
 
-
-      <button type="button" class="barButton barButton_import" 
-        v-if="can_admin_folder"
-        @click="showImportModal = true"
-      ><span>    
-        {{ $t('import') }}
-      </span></button>
-      
-      <UploadFile
-        v-if="showImportModal"
-        @close="showImportModal = false"
-        :slugFolderName="slugProjectName"
-        :type="'projects'"
-        :read_only="read_only"
-      />
-
-      <button type="button" class="barButton barButton_text" 
-        @click="createTextMedia"
-        v-if="can_admin_folder"
+      <button type="button" class="barButton"
+        @click="current_mode = 'preview'"
+        :class="{ 'is--active' : current_mode === 'preview' }"
       >
-        <span>
-          {{ $t('create_text') }}
-        </span>
+        1. aperçu
       </button>
 
-      <button 
+      <button type="button" class="barButton"
         v-if="can_admin_folder"
-        type="button" 
-        class="barButton barButton_text" 
-        :class="{ 'is--active' : !preview_mode }"
-        @click="preview_mode = !preview_mode"
+        @click="current_mode = 'media'"
+        :class="{ 'is--active' : current_mode === 'media' }"
       >
-        mode édition
+        2. média
       </button>
+
+      <div class="padding-left-small"
+        v-if="current_mode === 'media'"
+      >
+
+        <button type="button" class="barButton barButton_import" 
+          @click="showImportModal = true"
+        ><span>    
+          {{ $t('import') }}
+        </span></button>      
+        <UploadFile
+          v-if="showImportModal"
+          @close="showImportModal = false"
+          :slugFolderName="slugProjectName"
+          :type="'projects'"
+          :read_only="read_only"
+        />
+
+        <button type="button" class="barButton barButton_text" 
+          @click="createTextMedia"
+        >
+          <span>
+            {{ $t('create_text') }}
+          </span>
+        </button>
+
+      </div>
+
+      <button type="button" class="barButton"
+        v-if="can_admin_folder"
+        @click="current_mode = 'drawing'"
+        :class="{ 'is--active' : current_mode === 'drawing' }"
+      >
+        3. liens
+      </button>
+
+      <div class="padding-left-small"
+        v-if="current_mode === 'drawing'"
+      >
+
+        <button type="button" class="barButton"
+        >
+          <label for="select_drawings">
+            <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode">&nbsp;sélectionner
+          </label>        
+        </button>
+
+        <button type="button" class="barButton"
+          @click="$eventHub.$emit('remove_selection')"
+        >
+          supprimer sélection
+        </button>
+
+        <input type="range" min="1" max="10" v-model="drawing_options.width" />
+      </div>
 
     </div>
 
@@ -141,7 +177,7 @@
         <MediaPublication
           :page="page"
           :media="media"
-          :preview_mode="preview_mode"
+          :preview_mode="current_mode !== 'media'"
           :read_only="read_only"
           :pixelsPerMillimeters="1"
           :slugFolderName="slugProjectName"
@@ -152,6 +188,16 @@
           @unselected="noSelection"
         />
       </div>
+
+      <FabricCanvas
+        :medias="sortedMedias"
+        :project="project"
+        :slugProjectName="slugProjectName"
+        :current_mode="current_mode"
+        :drawing_options="drawing_options"
+        :class="{ 'is--clickthrough' : current_mode !== 'drawing' }"
+      />      
+
     </div>  
 
   </div>    
@@ -159,6 +205,7 @@
 <script>
 import UploadFile from './modals/UploadFile.vue';
 import MediaPublication from './subcomponents/MediaPublication.vue';
+import FabricCanvas from './subcomponents/FabricCanvas.vue';
 import TagsAndAuthorFilters from './subcomponents/TagsAndAuthorFilters.vue';
 import { setTimeout } from 'timers';
 import EditProject from './modals/EditProject.vue';
@@ -172,6 +219,7 @@ export default {
   },
   components: {
     MediaPublication,
+    FabricCanvas,
     UploadFile,
     EditProject,
     TagsAndAuthorFilters
@@ -192,12 +240,17 @@ export default {
         margin_top: 0,
         margin_bottom: 0,
         width: 1200,
-        height: 10000,
+        height: 5000,
         gridstep: 50
       },
       has_media_selected: false,
-      preview_mode: true,
-      showInputPasswordField: false
+      current_mode: 'preview',
+      showInputPasswordField: false,
+      drawing_options: {
+        width: 4,
+        select_mode: true,
+        color: '#4034FF'
+      }
     }
   },
   mounted() {
@@ -338,18 +391,20 @@ export default {
     },
     createTextMedia() {
       this.$eventHub.$on('socketio.media_created_or_updated', this.newTextMediaCreated);
+
+      const y = Math.max(document.getElementsByClassName('m_projectview')[0].scrollTop, Math.round(Math.random() * 5) * 40);
       this.$root.createMedia({
         slugFolderName: this.slugProjectName,
         type: 'projects',
         additionalMeta: {
           type: 'text',
           x: Math.round(Math.random() * 5) * 40,
-          y: Math.round(Math.random() * 5) * 40,
+          y,
           width: 200,
           height: 200
         }
       });
-      this.preview_mode = false;
+      this.current_mode = 'media';
     },
     submitPassword() {
       console.log('METHODS • Project: submitPassword');
@@ -371,7 +426,6 @@ export default {
       if (this.$root.state.dev_mode === 'debug') {
         console.log('METHODS • MediaCard: removeMedia');
       }
-      debugger;
       if (window.confirm(this.$t('sureToRemoveMedia'))) {
         this.$root.removeMedia(this.slugProjectName, this.metaFileName);
       }

@@ -128,11 +128,14 @@ export default {
 
         let formData = new FormData();
         formData.append('files', f, filename);
+
+        const y = Math.max(document.getElementsByClassName('m_projectview')[0].scrollTop, Math.round(Math.random() * 5) * 40);
+
         const meta = {
           fileCreationDate: modified,
           authors: this.$root.settings.current_author.hasOwnProperty('name') ? [{ name: this.$root.settings.current_author.name }] : '',
           x: Math.round(Math.random() * 5) * 40,
-          y: Math.round(Math.random() * 5) * 40,
+          y,
           width: 200,
           height: 200
         }

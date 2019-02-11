@@ -151,8 +151,6 @@ module.exports = (function() {
   function filterMedias(socket, type, folders_and_medias) {
     dev.logfunction(`AUTH — filterMedias`);
 
-    debugger;
-
     if (canAdminFolder(socket, folders_and_medias, type)) {
       return folders_and_medias;
     } else {

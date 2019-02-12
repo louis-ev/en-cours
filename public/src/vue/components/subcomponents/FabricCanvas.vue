@@ -29,11 +29,12 @@ export default {
 
     this.canvas = new fabric.Canvas(this.$refs.canvas);
 
-    this.setDrawingOptions();
 
     if(this.project.hasOwnProperty('canvas_information') && this.project.canvas_information !== '') {
       this.canvas.loadFromJSON(JSON.parse(this.project.canvas_information));
     }
+
+    this.setDrawingOptions();
 
     this.canvas.on('mouse:down', (o) => {
 
@@ -52,7 +53,6 @@ export default {
           cornerStyle2: true
         });
         this.canvas.add(this.new_line);
-
       }
     });
     this.canvas.on('mouse:move', (o) => {
@@ -75,7 +75,7 @@ export default {
         this.updateLinksList();
       }
 
-      if(o.target.type === 'line') {
+      if(o.target) {
         this.updateLinksList();
       }
     });    
@@ -106,7 +106,7 @@ export default {
         o.evented = this.drawing_options.select_mode;
       });
       if(!this.drawing_options.select_mode) {
-        this.canvas.cursor = 'crosshair';
+        this.canvas.defaultCursor = 'crosshair';
       }
 
       // this.canvas.isDrawingMode = !this.drawing_options.select_mode;

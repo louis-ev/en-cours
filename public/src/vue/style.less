@@ -1034,7 +1034,7 @@ body {
   text-align: left;
 
 
-  // background-color: #fff;
+  background-color: #fff;
   // color: @c-rouge;
 
   border-radius: 4px;
@@ -2827,21 +2827,28 @@ body {
   bottom: 50px;
   z-index: 10;
 
-  width: 220px;
+  width: 260px;
 
-  padding: 20px;
+  padding: 10px;
   // background-color: white;
   // border: 4px solid #000;
   // border-bottom: 0;
 
 
-  button {
+  button, .button {
     border: 4px solid #000;
     .font-verysmall;
+
+    display: flex;
+    align-items: center;    
   }
 
   > button:last-child {
     margin-bottom: 0;
+  }
+
+  > * {
+    display: block;
   }
 
 }

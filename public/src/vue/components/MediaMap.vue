@@ -82,7 +82,7 @@
         v-if="current_mode === 'media'"
       >
 
-        <button type="button" class="barButton barButton_import" 
+        <button type="button" class="button barButton barButton_import" 
           @click="showImportModal = true"
         ><span>    
           {{ $t('import') }}
@@ -95,7 +95,7 @@
           :read_only="read_only"
         />
 
-        <button type="button" class="barButton barButton_text" 
+        <button type="button" class="button barButton barButton_text" 
           @click="createTextMedia"
         >
           <span>
@@ -105,7 +105,7 @@
 
       </div>
 
-      <button type="button" class="barButton"
+      <button type="button" class="button barButton"
         v-if="can_admin_folder"
         @click="current_mode = 'drawing'"
         :class="{ 'is--active' : current_mode === 'drawing' }"
@@ -117,14 +117,15 @@
         v-if="current_mode === 'drawing'"
       >
 
-        <button type="button" class="barButton"
+        <div class="button barButton"
         >
           <label for="select_drawings">
-            <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode">&nbsp;sélectionner
+            <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode">
+            sélectionner
           </label>        
-        </button>
+        </div>
 
-        <button type="button" class="barButton"
+        <button type="button" class="button barButton"
           @click="$eventHub.$emit('remove_selection')"
         >
           supprimer sélection

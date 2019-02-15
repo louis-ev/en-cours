@@ -4,7 +4,6 @@ const dev = require('./dev-log'),
   exporter = require('./exporter');
 
 const file = require('./file');
-const settings = require('../settings.json');
 
 module.exports = (function() {
   dev.log(`Sockets module initialized at ${api.getCurrentDate()}`);
@@ -105,8 +104,9 @@ module.exports = (function() {
   /**************************************************************** FOLDER ********************************/
   function onListFolders(socket, data) {
     dev.logfunction(`EVENT - onListFolders`);
-    if (!data.hasOwnProperty('type')) {
+    if (!data || !data.hasOwnProperty('type')) {
       dev.error(`Missing type field`);
+      return;
     }
     const type = data.type;
     sendFolders({ type, socket });
@@ -457,14 +457,18 @@ module.exports = (function() {
               .then(folders_and_medias => {
                 dev.logverbose(`Got medias, now sending to the right clients`);
 
-                if (folders_and_medias !== undefined && metaFileName && id) {
-                  folders_and_medias[slugFolderName].medias[
-                    metaFileName
-                  ].id = id;
+                if (
+                  folders_and_medias !== undefined &&
+                  Object.keys(folders_and_medias).length
+                ) {
+                  if (metaFileName && id) {
+                    folders_and_medias[slugFolderName].medias[
+                      metaFileName
+                    ].id = id;
+                  }
+                  foldersData[slugFolderName].medias =
+                    folders_and_medias[slugFolderName].medias;
                 }
-
-                foldersData[slugFolderName].medias =
-                  folders_and_medias[slugFolderName].medias;
 
                 Object.keys(io.sockets.connected).forEach(sid => {
                   if (!!socket && socket.id !== sid) {

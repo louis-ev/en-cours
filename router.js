@@ -2,8 +2,7 @@ const path = require('path'),
   fs = require('fs-extra'),
   archiver = require('archiver');
 
-const settings = require('./settings.json'),
-  sockets = require('./core/sockets'),
+const sockets = require('./core/sockets'),
   dev = require('./core/dev-log'),
   cache = require('./core/cache'),
   api = require('./core/api'),
@@ -55,7 +54,7 @@ module.exports = function(app) {
       pageData.slugProjectName = '';
       pageData.url = req.path;
       pageData.protocol = req.protocol;
-      pageData.structure = settings.structure;
+      pageData.structure = global.settings.structure;
       pageData.isDebug = dev.isDebug();
 
       pageData.mode = 'live';
@@ -174,7 +173,7 @@ module.exports = function(app) {
     let pdfName = req.param('pdfName');
     const cachePath = path.join(
       global.tempStorage,
-      settings.cacheDirname,
+      global.settings.cacheDirname,
       '_publications'
     );
     const pdfPath = path.join(cachePath, pdfName);
@@ -190,7 +189,7 @@ module.exports = function(app) {
     let videoName = req.param('videoName');
     const cachePath = path.join(
       global.tempStorage,
-      settings.cacheDirname,
+      global.settings.cacheDirname,
       '_publications'
     );
     const videoPath = path.join(cachePath, videoName);

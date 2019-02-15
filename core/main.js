@@ -91,7 +91,7 @@ module.exports = function({ router }) {
 
       global.tempStorage = getPath.getCacheFolder();
 
-      dev.log(`——— Starting dodoc2 app version ${global.appInfos.version}`);
+      dev.log(`——— Starting app version ${global.appInfos.version}`);
 
       cleanCacheFolder().then(
         () => {

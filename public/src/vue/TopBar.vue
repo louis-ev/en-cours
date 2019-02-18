@@ -11,8 +11,6 @@
           en cours<span>*</span>
         </span>
       </div>
-
-
       <!-- 
       <button type="button" class="m_topbar--left--menuButton"
         v-if="menu_is_enabled"
@@ -29,18 +27,27 @@
       -->
     </div>
 
-    <div class="m_topbar--center"
+    <div 
+      class="m_topbar--center"
       :class="{ 'has--menu_open' : $root.do_navigation.view === 'ProjectView' }"
-    >
-
-    </div>
+    />
 
     <div class="m_topbar--right"
-      v-if="project.hasOwnProperty('name')" 
     >
-      <div class="m_topbar--right--projectName">
+      <div class="m_topbar--right--tagline"
+        v-if="!project.hasOwnProperty('name')" 
+      >
+        <div>
+          <small>
+            *un <span :style="`color: var(--color-maroon);`">état</span> de la recherche <br>
+            de projet à l’ensad
+          </small>
+        </div>
+      </div>
+      <div class="m_topbar--right--projectName"
+        v-if="project.hasOwnProperty('name')" 
+      >
         <div
-          v-if="project.hasOwnProperty('name')" 
           @click="$root.do_navigation.view = 'ProjectView'"
         >
           <span>

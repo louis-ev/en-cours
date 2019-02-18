@@ -64,78 +64,85 @@
       </div>
 
       <button type="button" class="barButton"
-        @click="current_mode = 'preview'"
-        :class="{ 'is--active' : current_mode === 'preview' }"
-      >
-        1. aperçu
-      </button>
-
-      <button type="button" class="barButton"
+        @click="current_mode !== 'preview' ? current_mode = 'preview' : current_mode = 'media' "
         v-if="can_admin_folder"
-        @click="current_mode = 'media'"
-        :class="{ 'is--active' : current_mode === 'media' }"
       >
-        2. média
+        <template v-if="current_mode === 'preview'">
+          éditer
+        </template>
+        <template v-else>
+          aperçu
+        </template>
       </button>
 
-      <div class="padding-left-small"
-        v-if="current_mode === 'media'"
-      >
+      <template v-if="current_mode !== 'preview'">
 
-        <button type="button" class="button barButton barButton_import" 
-          @click="showImportModal = true"
-        ><span>    
-          {{ $t('import') }}
-        </span></button>      
-        <UploadFile
-          v-if="showImportModal"
-          @close="showImportModal = false"
-          :slugFolderName="slugProjectName"
-          :type="'projects'"
-          :read_only="read_only"
-        />
-
-        <button type="button" class="button barButton barButton_text" 
-          @click="createTextMedia"
+        <button type="button" class="barButton"
+          v-if="can_admin_folder"
+          @click="current_mode = 'media'"
+          :class="{ 'is--active' : current_mode === 'media' }"
         >
-          <span>
-            {{ $t('create_text') }}
-          </span>
+          1. média
         </button>
 
-      </div>
-
-      <button type="button" class="button barButton"
-        v-if="can_admin_folder"
-        @click="current_mode = 'drawing'"
-        :class="{ 'is--active' : current_mode === 'drawing' }"
-      >
-        3. liens
-      </button>
-
-      <div class="padding-left-small"
-        v-if="current_mode === 'drawing'"
-      >
-
-        <div class="button barButton"
+        <div class="padding-left-small"
+          v-if="current_mode === 'media'"
         >
-          <label for="select_drawings">
-            <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode">
-            sélectionner
-          </label>        
+
+          <button type="button" class="button barButton barButton_import" 
+            @click="showImportModal = true"
+          ><span>    
+            {{ $t('import') }}
+          </span></button>      
+          <UploadFile
+            v-if="showImportModal"
+            @close="showImportModal = false"
+            :slugFolderName="slugProjectName"
+            :type="'projects'"
+            :read_only="read_only"
+          />
+
+          <button type="button" class="button barButton barButton_text" 
+            @click="createTextMedia"
+          >
+            <span>
+              {{ $t('create_text') }}
+            </span>
+          </button>
+
         </div>
 
         <button type="button" class="button barButton"
-          @click="$eventHub.$emit('remove_selection')"
+          v-if="can_admin_folder"
+          @click="current_mode = 'drawing'"
+          :class="{ 'is--active' : current_mode === 'drawing' }"
         >
-          supprimer sélection
+          2. liens
         </button>
 
-        <!-- <input type="range" min="1" max="10" v-model="drawing_options.width" /> -->
-      </div>
+        <div class="padding-left-small"
+          v-if="current_mode === 'drawing'"
+        >
 
+          <div class="button barButton"
+          >
+            <label for="select_drawings">
+              <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode">
+              sélectionner
+            </label>        
+          </div>
+
+          <button type="button" class="button barButton"
+            @click="$eventHub.$emit('remove_selection')"
+          >
+            supprimer sélection
+          </button>
+
+          <!-- <input type="range" min="1" max="10" v-model="drawing_options.width" /> -->
+        </div>
+
+      </template>
     </div>
-
 
     <div class="m_mediamap">
       <div 
@@ -191,6 +198,7 @@
       </div>
 
       <FabricCanvas
+        v-if="is_ready_to_mount_canvas"
         :medias="sortedMedias"
         :project="project"
         :slugProjectName="slugProjectName"
@@ -250,14 +258,19 @@ export default {
       drawing_options: {
         width: 4,
         select_mode: false,
-        color: '#4034FF'
-      }
+        color: '#000'
+      },
+      is_ready_to_mount_canvas: false
     }
   },
   mounted() {
     if(this.$root.settings.media_filter.keyword || this.$root.settings.media_filter.author) {
       this.show_filters = true;
     }
+
+    setTimeout(() => {
+      this.is_ready_to_mount_canvas = true;
+    }, 500)
   },
   created() {
     // document.addEventListener('dragover', this.fileDragover);

@@ -99,6 +99,7 @@
             :index="index"
           />
         </transition-group>
+
       </template>
       <template v-else>
         <transition-group
@@ -125,7 +126,9 @@
           </div>
         </transition-group>
       </template>
+
     </main>
+
 
   </div>
 </template>

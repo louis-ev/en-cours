@@ -18,6 +18,7 @@
 
 :root {
   --input-border-color-focus:  @c-active_color;
+  --color-maroon: rgb(182, 108, 108);
 }
 
 ::-moz-selection {
@@ -204,6 +205,13 @@ body {
 
       .m_topbar--left--logo--type {
   
+        span {
+          position: relative;
+          display: inline-block;
+          font-size: .8em;
+          top: -0.2em;
+        }
+
       }
 
       
@@ -294,8 +302,8 @@ body {
     }
 
     &:not(.has--menu_open) {
+      opacity: 0;
       &::after {
-        display: none;
       }
     }
 
@@ -386,7 +394,9 @@ body {
 
     .m_topbar--right--projectName {
       text-align: right;
-
+    }
+    .m_topbar--right--tagline {
+      line-height: 0.9;
     }
   }
   
@@ -2651,6 +2661,7 @@ body {
   canvas {
     position: relative;
     z-index: 100;
+    image-rendering: pixelated;
   }
 }  
 

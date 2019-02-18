@@ -1261,11 +1261,20 @@ let vm = new Vue({
 
       const current_medias = this.currentProject.medias;
 
-      const media_with_highest_z = Object.values(current_medias)
-        .filter(m => m.hasOwnProperty('z'))
-        .reduce(function(prev, current) {
-          return prev.z > current.z ? prev : current;
-        });
+      const medias_with_z = Object.values(current_medias).filter(m =>
+        m.hasOwnProperty('z')
+      );
+
+      if (medias_with_z.length === 0) {
+        return 1;
+      }
+
+      const media_with_highest_z = medias_with_z.reduce(function(
+        prev,
+        current
+      ) {
+        return prev.z > current.z ? prev : current;
+      });
 
       if (!media_with_highest_z.hasOwnProperty('z')) {
         return 1;

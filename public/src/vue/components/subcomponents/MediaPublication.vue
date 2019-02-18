@@ -6,7 +6,8 @@
     :data-media_type="media.type"
     @mouseover="mouseOver"
     @mouseleave="mouseLeave"
-    @mousedown.prevent.stop="is_selected = true"
+    @mousedown="selectMedia"
+    @click.prevent.stop="preview_mode ? $root.openMedia({ slugProjectName: slugFolderName, metaFileName: media.metaFileName }) : ''"
     :class="{ 
       'is--dragged' : is_dragged, 
       'is--resized' : is_resized, 
@@ -109,6 +110,7 @@ export default {
     page: Object,
     read_only: Boolean,
     preview_mode: Boolean,
+    current_mode: String,
     pixelsPerMillimeters: Number,
     slugFolderName: String,
     type: String,
@@ -201,6 +203,13 @@ export default {
   },
   computed: {
     mediaStyles() {
+      if(this.is_dragged) {
+        return `
+          transform: translate(${this.mediaPos.x}px, ${this.mediaPos.y}px) rotate(${this.rotate}deg) scale(1.06);
+          width: ${this.mediaSize.width}px;
+          height: ${this.mediaSize.height}px;
+        `
+      }
       return `
         transform: translate(${this.mediaPos.x}px, ${this.mediaPos.y}px) rotate(${this.rotate}deg);
         width: ${this.mediaSize.width}px;
@@ -485,6 +494,16 @@ export default {
       window.removeEventListener('touchend', this.dragUp);
 
       return false;
+    },
+
+    selectMedia(event) {
+      if (this.$root.state.dev_mode === 'debug') {
+        console.log(`METHODS • MediaPublication: selectMedia`);
+      }      
+      if(!this.preview_mode) {
+        this.is_selected = true;
+        event.stopPropagation();
+      }
     },
     deselectMedia(event) {
       if (this.$root.state.dev_mode === 'debug') {

@@ -6,9 +6,9 @@
   >
 
     <template v-if="media.type === 'image'">
-      <img :src="linkToImageThumb">
-      <transition name="fade" :duration="600">
-        <img v-if="is_hovered && $root.state.is_electron" :src="linkToHoveredThumb">
+      <img :src="linkToImageThumb"
+          draggable="false"
+      >
       </transition>
     </template>
 

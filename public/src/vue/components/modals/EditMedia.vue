@@ -6,11 +6,10 @@
     :read_only="read_only"
     :typeOfModal="media.type !== 'text' ? 'LargeAndNoScroll' : 'LargeAndScroll'"
     :askBeforeClosingModal="askBeforeClosingModal"
-    :show_sidebar="$root.media_modal.show_sidebar"
-    :is_minimized="$root.media_modal.minimized"
-    :can_minimize="true"
-    :media_navigation="true"
-    >
+    :show_sidebar="true"
+    :can_minimize="false"
+    :media_navigation="false"
+  >
     <template slot="header">
       <div class="" style="display: none;">
         {{ $t('edit_the_media') }}
@@ -73,16 +72,15 @@
         <hr class="hide_on_print">
       </div>
 
-      <div v-if="false" class="hide_on_print">
-        <div class="m_metaField" v-if="!!media.type">
+      <div v-if="true" class="hide_on_print">
+        <!-- <div class="m_metaField" v-if="!!media.type">
           <div>
             {{ $t('type') }}
           </div>
           <div>
             {{ media.type }}
-            <!-- <img class="mediaTypeIcon" :src="mediaTypeIcon[media.type]" /> -->
           </div>
-        </div>
+        </div> -->
         <!-- <div class="m_metaField" v-if="!!media.authors">
           <div>
             {{ $t('author') }}
@@ -91,7 +89,7 @@
             {{ media.authors }}
           </div>
         </div> -->
-        <div class="m_metaField">
+        <!-- <div class="m_metaField">
           <div>
             {{ $t('created') }}
           </div>
@@ -117,17 +115,17 @@
           <div :title="media.date_modified">
             {{ $root.formatDateToHuman(media.date_modified) }}
           </div>
-        </div>
+        </div> -->
 
   <!-- Caption -->
-        <!-- <div 
+        <div 
           v-if="(!read_only || !!mediadata.caption) && mediadata.type !== 'text'"
           class="margin-bottom-small" 
         >
           <label>{{ $t('caption') }}</label><br>
           <textarea v-model="mediadata.caption" :readonly="read_only">
           </textarea>
-        </div> -->
+        </div>
 
   <!-- Type of media (if guessed wrong from filename, will only be stored in the meta file and used as a reference when displaying that media on the client) -->
   <!-- Disabled for now: if an image or video is tagged as "text" or marked, a folder becomes unreadable -->
@@ -149,30 +147,27 @@
         </div> -->
 
   <!-- Keywords -->
-      <div class="margin-bottom-small">
+      <!-- <div class="margin-bottom-small">
         <label>{{ $t('keywords') }}<br>
         *<small>{{ $t('validate_with_enter') }}</small></label>
         <TagsInput 
           :keywords="mediadata.keywords"
           @tagsChanged="newTags => mediadata.keywords = newTags"
         />
-      </div>
+      </div> -->
 
   <!-- Author(s) -->
-        <div v-if="!read_only || !!mediadata.authors" class="margin-bottom-small">
+        <!-- <div v-if="!read_only || !!mediadata.authors" class="margin-bottom-small">
           <label>{{ $t('author') }}</label>
 
           <AuthorsInput
             :currentAuthors="mediadata.authors"
             @authorsChanged="newAuthors => mediadata.authors = newAuthors"
           />
-
-          <!-- <textarea v-model="mediadata.authors[0]" :readonly="read_only">
-          </textarea> -->
-        </div>
+        </div> -->
 
   <!-- Fav or not -->
-        <div class="margin-bottom-small">
+        <!-- <div class="margin-bottom-small">
           <span class="switch switch-xs">
             <input type="checkbox" class="switch" id="favswitch_editmedia" v-model="mediadata.fav" :readonly="read_only">
             <label for="favswitch_editmedia">
@@ -188,7 +183,7 @@
             </label>
           </span>
         </div>
-
+ -->
       </div>
     </template>
 

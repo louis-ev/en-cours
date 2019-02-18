@@ -131,7 +131,7 @@
           supprimer sélection
         </button>
 
-        <input type="range" min="1" max="10" v-model="drawing_options.width" />
+        <!-- <input type="range" min="1" max="10" v-model="drawing_options.width" /> -->
       </div>
 
     </div>
@@ -387,6 +387,9 @@ export default {
     openMediaModal(metaFileName) {
       if (this.$root.state.dev_mode === 'debug') {
         console.log('METHODS • MediaMap: openMediaModal');
+      }
+      if(this.current_mode !== 'preview') {
+        return;
       }
       this.$root.openMedia({ slugProjectName: this.slugProjectName, metaFileName });      
     },

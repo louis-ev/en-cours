@@ -46,7 +46,7 @@
         :slugProjectName="$root.media_modal.current_slugProjectName"
         :media="$root.store.projects[$root.media_modal.current_slugProjectName].medias[$root.media_modal.current_metaFileName]"
         @close="$root.closeMedia()"
-        :read_only="!$root.state.connected"
+        :read_only="!$root.state.connected || !can_admin_open_folder"
       >
       </EditMedia>      
     </template>  
@@ -109,6 +109,12 @@ export default {
         return false;
       }
       return true;
+    },
+    can_admin_open_folder() {
+      return this.$root.canAdminFolder({
+        type: 'projects', 
+        slugFolderName: this.$root.media_modal.current_slugProjectName
+      })
     }
   },
   methods: {

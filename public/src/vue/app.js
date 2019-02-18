@@ -1250,6 +1250,27 @@ let vm = new Vue({
       } else if (this.$root.do_navigation.view === 'ProjectView') {
         this.$root.closeProject();
       }
+    },
+    getHighestZNumberForProjectMedias() {
+      if (
+        !this.currentProject.hasOwnProperty('medias') ||
+        Object.keys(this.currentProject.medias) === 0
+      ) {
+        return 1;
+      }
+
+      const current_medias = this.currentProject.medias;
+
+      const media_with_highest_z = Object.values(current_medias)
+        .filter(m => m.hasOwnProperty('z'))
+        .reduce(function(prev, current) {
+          return prev.z > current.z ? prev : current;
+        });
+
+      if (!media_with_highest_z.hasOwnProperty('z')) {
+        return 1;
+      }
+      return media_with_highest_z.z + 1;
     }
   }
 });

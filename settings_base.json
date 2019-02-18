@@ -118,6 +118,9 @@
           "y": {
             "type": "number"
           },
+          "z" : {
+            "type": "number"
+          },
           "rotate": {
             "type": "number"
           },

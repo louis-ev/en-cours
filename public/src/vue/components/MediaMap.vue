@@ -373,7 +373,7 @@ export default {
       }, []);
       
       return sortedMedias;
-    }    
+    }
   },
   methods: {
     fileDragover() {
@@ -410,6 +410,8 @@ export default {
       this.$eventHub.$on('socketio.media_created_or_updated', this.newTextMediaCreated);
 
       const y = Math.max(document.getElementsByClassName('m_projectview')[0].scrollTop, Math.round(Math.random() * 5) * 40);
+      const z = this.$root.getHighestZNumberForProjectMedias();
+
       this.$root.createMedia({
         slugFolderName: this.slugProjectName,
         type: 'projects',
@@ -417,6 +419,7 @@ export default {
           type: 'text',
           x: Math.round(Math.random() * 5) * 40,
           y,
+          z,
           width: 200,
           height: 200
         }
@@ -436,7 +439,7 @@ export default {
       if (this.$root.justCreatedMediaID === mdata.id) {
         this.$root.justCreatedMediaID = false;
         this.$eventHub.$off('socketio.media_created_or_updated', this.newTextMediaCreated);
-        this.openMediaModal(mdata.metaFileName);
+        this.$root.openMedia({ slugProjectName: this.slugProjectName, metaFileName: mdata.metaFileName });          
       }
     },
     removeMedia(values) {

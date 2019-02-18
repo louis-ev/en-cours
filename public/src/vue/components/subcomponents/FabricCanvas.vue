@@ -48,9 +48,7 @@ export default {
           stroke: this.drawing_options.color,
           strokeWidth:  this.drawing_options.width,
           originX: 'center',
-          originY: 'center',
-          transparentCorners: false,
-          cornerStyle2: true
+          originY: 'center'
         });
         this.canvas.add(this.new_line);
       }

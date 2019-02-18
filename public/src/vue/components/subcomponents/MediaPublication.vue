@@ -213,12 +213,14 @@ export default {
           transform: translate(${this.mediaPos.x}px, ${this.mediaPos.y}px) rotate(${this.rotate}deg) scale(1.06);
           width: ${this.mediaSize.width}px;
           height: ${this.mediaSize.height}px;
+          z-index: ${this.media.z};
         `
       }
       return `
         transform: translate(${this.mediaPos.x}px, ${this.mediaPos.y}px) rotate(${this.rotate}deg);
         width: ${this.mediaSize.width}px;
         height: ${this.mediaSize.height}px;
+        z-index: ${this.media.z};
       `
       ;
     },
@@ -243,7 +245,7 @@ export default {
         type: this.type,
         slugFolderName: this.slugFolderName, 
         slugMediaName: this.metaFileName,
-        data: val
+        data: val,
       });
     },
     limitMediaXPos(xPos) {
@@ -363,7 +365,7 @@ export default {
 
         this.updateMediaPubliMeta({ 
           width: this.mediaSize.width,
-          height: this.mediaSize.height 
+          height: this.mediaSize.height
         });
         this.is_resized = false;
       }
@@ -484,11 +486,12 @@ export default {
       if (this.is_dragged) {
         this.mediaPos.x = this.roundMediaVal(this.mediaPos.x - this.page.margin_left) + this.page.margin_left;
         this.mediaPos.y = this.roundMediaVal(this.mediaPos.y - this.page.margin_top) + this.page.margin_top;
-
+        const z = this.$root.getHighestZNumberForProjectMedias();
 
         this.updateMediaPubliMeta({ 
           x: this.mediaPos.x,
-          y: this.mediaPos.y 
+          y: this.mediaPos.y,
+          z
         });
         this.is_dragged = false;
       }

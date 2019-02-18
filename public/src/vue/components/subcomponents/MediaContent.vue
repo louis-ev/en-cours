@@ -7,13 +7,13 @@
 
     <template v-if="media.type === 'image'">
       <img :src="linkToImageThumb"
-          draggable="false"
+        draggable="false"
       >
       </transition>
     </template>
 
     <template v-else-if="media.type === 'video'">
-      <template v-if="context === 'preview'">
+      <template v-if="context === 'publication'">
         <img :src="linkToVideoThumb">
       </template>
       <template v-else>

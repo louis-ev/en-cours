@@ -25,6 +25,11 @@
       :preview_size="800"
       v-model="media.content"
     />
+    <transition name="slideup">
+      <div class="m_media--caption" v-show="!!media.caption && is_hovered">
+        {{ media.caption }}
+      </div>
+    </transition>
 
     <div 
       v-if="!preview_mode" 

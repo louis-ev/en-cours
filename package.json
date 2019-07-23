@@ -16,39 +16,18 @@
     "url": "https://github.com/louis-ev/workshop_ensad/issues"
   },
   "scripts": {
-    "start": "electron .",
-    "debug": "electron --inspect=5858 . --debug --verbose",
-    "debug-brk": "electron --inspect=5858 . --debug-brk --verbose",
-    "node-start": "node .",
-    "node-debug": "node . --inspect=5858 --debug --verbose",
-    "node-debug-brk": "node . --inspect=5858 --debug-brk --verbose",
-    "pack": "build --dir",
-    "dist": "build",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "node .",
+    "debug": "node . --inspect=5858 --debug --verbose"
   },
   "engines": {
     "node": "8.9.3",
     "npm": "*"
-  },
-  "build": {
-    "electronVersion": "2.0.16",
-    "appId": "encours",
-    "productName": "encours",
-    "asar": false,
-    "mac": {
-      "category": "public.app-category.education"
-    }
   },
   "dependencies": {
     "archiver": "^3.0.0",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "dodoc-parsedown": "git://github.com/louis-ev/dodoc-parsedown.git#master",
-    "electron-context-menu": "^0.10.1",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-log": "^2.2.17",
-    "electron-pdf-window": "^1.0.12",
-    "electron-window-state": "^5.0.3",
     "exif-reader": "^1.0.2",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
@@ -85,11 +64,6 @@
     "ws": "^6.1.2"
   },
   "devDependencies": {
-    "electron": "^2.0.16",
-    "electron-builder": "^20.38.5",
-    "electron-packager": "^13.0.1",
-    "electron-prebuilt": "^1.4.13",
-    "electron-rebuild": "^1.8.2",
     "node-gyp": "^3.8.0"
   }
 }

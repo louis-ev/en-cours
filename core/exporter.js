@@ -8,6 +8,8 @@ const path = require('path'),
 const sharp = require('sharp');
 sharp.cache(false);
 
+const puppeteer = require('puppeteer');
+
 const dev = require('./dev-log'),
   api = require('./api'),
   file = require('./file'),
@@ -246,38 +248,38 @@ module.exports = (function() {
                 `EXPORTER — makePDFForPubli : created cache folder at path ${cachePath}`
               );
 
-              const { BrowserWindow } = require('electron');
-              let win = new BrowserWindow({
-                width: 800,
-                height: 600,
-                show: false
-              });
-              win.loadURL(urlToPubli);
-
-              win.webContents.on('did-finish-load', () => {
-                // Use default printing options
-                setTimeout(() => {
-                  win.webContents.printToPDF(
-                    {
-                      marginsType: 1,
-                      pageSize: {
-                        width: publiData.width * 1000,
-                        height: publiData.height * 1000
-                      }
-                    },
-                    (error, data) => {
-                      if (error) throw error;
-                      fs.writeFile(pdfPath, data, error => {
-                        if (error) throw error;
-                        console.log('Write PDF successful');
-                        resolve({
-                          pdfName
+              puppeteer
+                .launch({
+                  headless: true,
+                  ignoreHTTPSErrors: true,
+                  args: ['--no-sandbox']
+                })
+                .then(browser => {
+                  return browser.newPage();
+                })
+                .then(page => {
+                  page
+                    .goto(urlToPubli, {
+                      waitUntil: 'networkidle2'
+                    })
+                    .then(() => {
+                      page.emulateMedia('print');
+                      page
+                        .pdf({
+                          path: pdfPath,
+                          printBackground: true,
+                          width: `${publiData.width}mm`,
+                          height: `${publiData.height}mm`
+                        })
+                        .then(() => {
+                          console.log('Write PDF successful');
+                          resolve({
+                            pdfName,
+                            pdfPath
+                          });
                         });
-                      });
-                    }
-                  );
-                }, 1000);
-              });
+                    });
+                });
             });
           });
       });

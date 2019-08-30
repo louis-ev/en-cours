@@ -6,37 +6,37 @@
   "userDirPath": "documents",
   "userDirname": "en-cours",
 
-  "contentDirname" : "user",
-  "cacheDirname" : "cache",
-  "metaFileext" : ".txt",
-  "thumbExt" : ".jpeg",
+  "contentDirname": "user",
+  "cacheDirname": "cache",
+  "metaFileext": ".txt",
+  "thumbExt": ".jpeg",
   "thumbFormat": "jpeg",
-  "folderMetaFilename" : "meta",
-  "folderPreviewFilename" : "meta_preview",
+  "folderMetaFilename": "meta",
+  "folderPreviewFilename": "meta_preview",
 
   "privateKeyPath": "",
   "certificatePath": "",
 
-  "metaDateFormat" : "YYYYMMDD_HHmmss",
-  "textEncoding" : "UTF-8",
-  "thumbFolderName" : "_thumbs",
-  "deletedFolderName" : "_bin",
+  "metaDateFormat": "YYYYMMDD_HHmmss",
+  "textEncoding": "UTF-8",
+  "thumbFolderName": "_thumbs",
+  "deletedFolderName": "_bin",
 
-  "mediaThumbQuality" : 70,
-  "maxFileSizeForUpload": 100, 
+  "mediaThumbQuality": 70,
+  "maxFileSizeForUpload": 100,
 
-  "regexpMatchFolderNames" : "^([^.]+)$",
-  "regexpGetFileExtension" : "\\.[^.]*$",
-  "regexpRemoveFileExtension" : "(.+?)(\\.[^.]*$|$)",
+  "regexpMatchFolderNames": "^([^.]+)$",
+  "regexpGetFileExtension": "\\.[^.]*$",
+  "regexpRemoveFileExtension": "(.+?)(\\.[^.]*$|$)",
 
-  "structure" : {
+  "structure": {
     "projects": {
       "path": "",
       "preview": {
         "width": 1200,
         "height": 1200,
         "thumbs": {
-          "resolutions": [50, 320, 640]          
+          "resolutions": [50, 320, 640]
         }
       },
       "fields": {
@@ -54,19 +54,20 @@
         },
         "password": {
           "type": "string",
-          "read_only": true        
+          "read_only": true
         },
         "authors": {
           "type": "string"
         },
         "keywords": {
           "type": "array"
-        },      
+        },
         "description": {
           "type": "string"
         },
         "canvas_information": {
-          "type": "string"
+          "type": "string",
+          "escape": false
         }
       },
       "medias": {
@@ -79,12 +80,12 @@
             "default": "current",
             "read_only": true
           },
-          "date_modified" : {
+          "date_modified": {
             "type": "date",
             "default": "current",
             "override": true
           },
-          "date_uploaded" : {
+          "date_uploaded": {
             "type": "date",
             "default": "current",
             "read_only": true
@@ -94,13 +95,21 @@
           },
           "type": {
             "type": "string",
-            "options": ["image", "video", "audio", "text", "document", "links", "other"],
+            "options": [
+              "image",
+              "video",
+              "audio",
+              "text",
+              "document",
+              "links",
+              "other"
+            ],
             "default": "other"
           },
-          "ratio" : {
+          "ratio": {
             "type": "number"
           },
-          "duration" : {
+          "duration": {
             "type": "number"
           },
           "authors": {
@@ -108,7 +117,7 @@
           },
           "keywords": {
             "type": "array"
-          },      
+          },
           "caption": {
             "type": "string"
           },
@@ -118,7 +127,7 @@
           "y": {
             "type": "number"
           },
-          "z" : {
+          "z": {
             "type": "number"
           },
           "rotate": {
@@ -135,7 +144,7 @@
             "default": true
           }
         }
-      } 
+      }
     }
   }
 }

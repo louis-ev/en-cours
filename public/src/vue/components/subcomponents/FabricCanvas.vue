@@ -12,114 +12,121 @@ export default {
     current_mode: String,
     drawing_options: Object
   },
-  components: {
-  },
+  components: {},
   data() {
     return {
       canvas: undefined,
       new_line: undefined,
       isDown: false
-    }
+    };
   },
-  
-  created() {
-  },
+
+  created() {},
   mounted() {
-    this.$eventHub.$on('remove_selection', this.removeSelection);
+    document.addEventListener("keyup", this.captureKeyListener);
+
+    this.$eventHub.$on("remove_selection", this.removeSelection);
 
     this.canvas = new fabric.Canvas(this.$refs.canvas);
 
-
-    if(this.project.hasOwnProperty('canvas_information') && this.project.canvas_information !== '') {
+    if (
+      this.project.hasOwnProperty("canvas_information") &&
+      this.project.canvas_information !== ""
+    ) {
       this.canvas.loadFromJSON(JSON.parse(this.project.canvas_information));
     }
 
     this.setDrawingOptions();
 
-    this.canvas.on('mouse:down', (o) => {
-
+    this.canvas.on("mouse:down", o => {
       this.isDown = true;
       var pointer = this.canvas.getPointer(o.e);
-      var points = [ pointer.x, pointer.y, pointer.x, pointer.y ];
-      
-      if(!this.drawing_options.select_mode){
-        this.new_line = new fabric.Line(points, {
-          fill: this.drawing_options.color,
-          stroke: this.drawing_options.color,
-          strokeWidth:  this.drawing_options.width,
-          originX: 'center',
-          originY: 'center'
-        });
-        this.canvas.add(this.new_line);
+      var points = [pointer.x, pointer.y, pointer.x, pointer.y];
+
+      if (!this.drawing_options.select_mode) {
+        // this.new_line = new fabric.Line(points, {
+        //   fill: this.drawing_options.color,
+        //   stroke: this.drawing_options.color,
+        //   strokeWidth: this.drawing_options.width,
+        //   originX: "center",
+        //   originY: "center"
+        // });
+        // this.canvas.add(this.new_line);
       }
     });
-    this.canvas.on('mouse:move', (o) => {
+    this.canvas.on("mouse:move", o => {
       if (!this.isDown) return;
       var pointer = this.canvas.getPointer(o.e);
-      
-      if(!this.drawing_options.select_mode){
-        this.new_line.set({ x2: pointer.x, y2: pointer.y });
-        this.canvas.renderAll(); 
+
+      if (!this.drawing_options.select_mode) {
+        // this.new_line.set({ x2: pointer.x, y2: pointer.y });
+        // this.new_line.setCoords();
+        this.canvas.renderAll();
       }
     });
 
-
-    this.canvas.on('mouse:up', (o) => {
+    this.canvas.on("mouse:up", o => {
       if (!this.isDown) return;
 
       this.isDown = false;
-      if(!this.drawing_options.select_mode){
-        this.new_line.setCoords();
+      if (!this.drawing_options.select_mode) {
+        // this.new_line.setCoords();
         this.updateLinksList();
       }
 
-      if(o.target) {
+      if (o.target) {
         this.updateLinksList();
       }
-    });    
+    });
     // this.setMedias();
   },
   beforeDestroy() {
-    this.$eventHub.$off('remove_selection', this.removeSelection);
+    this.$eventHub.$off("remove_selection", this.removeSelection);
+    document.removeEventListener("keyup", this.captureKeyListener);
   },
 
   watch: {
-    'project.canvas_information': function() {
+    "project.canvas_information": function() {
       this.canvas.loadFromJSON(JSON.parse(this.project.canvas_information));
       this.setDrawingOptions();
     },
-    'drawing_options': {
+    drawing_options: {
       handler() {
         this.setDrawingOptions();
       },
       deep: true
     }
   },
-  computed: { 
-  },
+  computed: {},
   methods: {
+    captureKeyListener(event) {
+      if (this.drawing_options.select_mode && event.key === "Backspace") {
+        this.removeSelection();
+      }
+    },
     setDrawingOptions() {
       this.canvas.selection = this.drawing_options.select_mode;
-      this.canvas.forEachObject((o) => {
+      this.canvas.forEachObject(o => {
         o.evented = this.drawing_options.select_mode;
       });
-      if(!this.drawing_options.select_mode) {
-        this.canvas.defaultCursor = 'crosshair';
+      if (!this.drawing_options.select_mode) {
+        this.canvas.defaultCursor = "Handwriting";
+        // this.canvas.defaultCursor = "crosshair";
+      } else {
       }
 
-      // this.canvas.isDrawingMode = !this.drawing_options.select_mode;
-      // this.canvas.freeDrawingBrush.color = this.drawing_options.color;
-      // this.canvas.freeDrawingBrush.width = this.drawing_options.width;
+      this.canvas.isDrawingMode = !this.drawing_options.select_mode;
+      this.canvas.freeDrawingBrush.color = this.drawing_options.color;
+      this.canvas.freeDrawingBrush.width = this.drawing_options.width;
     },
     setMedias() {
-      if(this.medias.length === 0) {
+      if (this.medias.length === 0) {
         return;
       }
 
       this.medias.map(m => {
-
-        if(m.type === "image") {
-          fabric.Image.fromURL(this.linkToImageThumb(m), (oImg) => {
+        if (m.type === "image") {
+          fabric.Image.fromURL(this.linkToImageThumb(m), oImg => {
             // scale image down, and flip it, before adding it onto canvas
             oImg.set({
               left: m.x,
@@ -129,8 +136,8 @@ export default {
             });
             this.canvas.add(oImg);
           });
-        } else if(m.type === "text") {
-          const text = new fabric.Text(m.content, { 
+        } else if (m.type === "text") {
+          const text = new fabric.Text(m.content, {
             left: m.x,
             top: m.y,
             width: m.width,
@@ -141,16 +148,18 @@ export default {
       });
     },
     linkToImageThumb(media) {
-      if(!media.hasOwnProperty('thumbs')) {
+      if (!media.hasOwnProperty("thumbs")) {
         return this.mediaURL(media);
       }
 
-      let pathToSmallestThumb = media.thumbs.filter(m => m.size === 1600)[0].path;
+      let pathToSmallestThumb = media.thumbs.filter(m => m.size === 1600)[0]
+        .path;
 
       if (
-      // if image is gif and context is not 'preview', let’s show the original gif
-        this.mediaURL(media).toLowerCase().endsWith('.gif')
-        ||
+        // if image is gif and context is not 'preview', let’s show the original gif
+        this.mediaURL(media)
+          .toLowerCase()
+          .endsWith(".gif") ||
         pathToSmallestThumb === undefined
       ) {
         return this.mediaURL(media);
@@ -163,24 +172,23 @@ export default {
       return `/${this.slugFolderName}/${media.media_filename}`;
     },
     removeSelection: function() {
-      this.canvas.getActiveObjects().forEach((obj) => {
-        this.canvas.remove(obj)
+      this.canvas.getActiveObjects().forEach(obj => {
+        this.canvas.remove(obj);
       });
-      this.canvas.discardActiveObject().renderAll()
+      this.canvas.discardActiveObject().renderAll();
 
       this.updateLinksList();
     },
     updateLinksList: function() {
       const canvas_information = JSON.stringify(this.canvas.toJSON());
-      this.$root.editFolder({ 
-        type: 'projects', 
-        slugFolderName: this.slugProjectName, 
-        data: { canvas_information } 
+      this.$root.editFolder({
+        type: "projects",
+        slugFolderName: this.slugProjectName,
+        data: { canvas_information }
       });
     }
   }
-}
+};
 </script>
 <style>
-
 </style>

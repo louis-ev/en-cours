@@ -28,7 +28,9 @@ export default {
 
     this.$eventHub.$on("remove_selection", this.removeSelection);
 
-    this.canvas = new fabric.Canvas(this.$refs.canvas);
+    this.canvas = new fabric.Canvas(this.$refs.canvas, {
+      enableRetinaScaling: false
+    });
 
     if (
       this.project.hasOwnProperty("canvas_information") &&

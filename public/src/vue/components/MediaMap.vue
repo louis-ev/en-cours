@@ -215,6 +215,7 @@
 
       <FabricCanvas
         v-if="is_ready_to_mount_canvas"
+        :key="map_height"
         :medias="sortedMedias"
         :map_height="map_height"
         :project="project"

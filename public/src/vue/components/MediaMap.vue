@@ -1,9 +1,6 @@
 <template>
-  <div class="">
-
-    <div class="m_projectAuthor" v-if="typeof project.authors === 'string'">
-      {{ project.authors }}
-    </div>
+  <div class>
+    <div class="m_projectAuthor" v-if="typeof project.authors === 'string'">{{ project.authors }}</div>
 
     <!-- <div class="m_actionbar--buttonBar" v-show="$root.state.connected">
 
@@ -15,7 +12,7 @@
       >
         retour
       </button>
-    </div> -->
+    </div>-->
 
     <!-- <div class="m_actionbar--text">
       {{ $t('showing') }} 
@@ -44,56 +41,68 @@
           @setFavFilter="a => $root.setFavAuthorFilter(a)"
         />
       </template>
-    </div> -->
-
+    </div>-->
 
     <div class="m_layerOptions">
       <div class="m_metaField" v-if="project.password === 'has_pass'">
-        <small class="m_project--presentation--text--infos--password c-rouge" v-if="project.password === 'has_pass'">
+        <small
+          class="m_project--presentation--text--infos--password c-rouge"
+          v-if="project.password === 'has_pass'"
+        >
           <label>{{ $t('protected_by_pass') }}</label>
         </small>
 
-        <button v-if="!can_admin_folder" type="button" class="buttonLink" :readonly="read_only" @click="showInputPasswordField = !showInputPasswordField">
-          {{ $t('password') }}
-        </button>
+        <button
+          v-if="!can_admin_folder"
+          type="button"
+          class="buttonLink passwordButton"
+          :readonly="read_only"
+          @click="showInputPasswordField = !showInputPasswordField"
+        >{{ $t('password') }}</button>
 
         <div v-if="showInputPasswordField && !can_admin_folder" class="margin-bottom-small">
-          <input type="password" ref="passwordField" @keyup.enter="submitPassword" autofocus placeholder="…">
-          <button type="button" class="button button-bg_rounded bg-bleuvert" @click="submitPassword">Envoyer</button>
+          <input
+            type="password"
+            ref="passwordField"
+            @keyup.enter="submitPassword"
+            autofocus
+            placeholder="…"
+          />
+          <button
+            type="button"
+            class="button button-bg_rounded bg-bleuvert"
+            @click="submitPassword"
+          >Envoyer</button>
         </div>
       </div>
 
-      <button type="button" class="barButton"
+      <button
+        type="button"
+        class="barButton"
         @click="current_mode !== 'preview' ? current_mode = 'preview' : current_mode = 'media' "
         v-if="can_admin_folder"
       >
-        <template v-if="current_mode === 'preview'">
-          éditer
-        </template>
-        <template v-else>
-          aperçu
-        </template>
+        <template v-if="current_mode === 'preview'">ajouter/modifier les contenus</template>
+        <template v-else>aperçu</template>
       </button>
 
       <template v-if="current_mode !== 'preview'">
-
-        <button type="button" class="barButton"
+        <button
+          type="button"
+          class="barButton"
           v-if="can_admin_folder"
           @click="current_mode = 'media'"
           :class="{ 'is--active' : current_mode === 'media' }"
-        >
-          1. média
-        </button>
+        >1. média</button>
 
-        <div class="padding-left-small"
-          v-if="current_mode === 'media'"
-        >
-
-          <button type="button" class="button barButton barButton_import" 
+        <div class="padding-left-small" v-if="current_mode === 'media'">
+          <button
+            type="button"
+            class="button barButton barButton_import"
             @click="showImportModal = true"
-          ><span>    
-            {{ $t('import') }}
-          </span></button>      
+          >
+            <span>{{ $t('import') }}</span>
+          </button>
           <UploadFile
             v-if="showImportModal"
             @close="showImportModal = false"
@@ -102,72 +111,82 @@
             :read_only="read_only"
           />
 
-          <button type="button" class="button barButton barButton_text" 
-            @click="createTextMedia"
-          >
-            <span>
-              {{ $t('create_text') }}
-            </span>
+          <button type="button" class="button barButton barButton_text" @click="createTextMedia">
+            <span>{{ $t('create_text') }}</span>
           </button>
-
         </div>
 
-        <button type="button" class="button barButton"
+        <button
+          type="button"
+          class="button barButton"
           v-if="can_admin_folder"
           @click="current_mode = 'drawing'"
           :class="{ 'is--active' : current_mode === 'drawing' }"
-        >
-          2. liens
-        </button>
+        >2. liens</button>
 
-        <div class="padding-left-small"
-          v-if="current_mode === 'drawing'"
-        >
-
-          <div class="button barButton"
-          >
+        <div class="padding-left-small" v-if="current_mode === 'drawing'">
+          <div class="button barButton">
             <label for="select_drawings">
-              <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode">
+              <input type="checkbox" id="select_drawings" v-model="drawing_options.select_mode" />
               sélectionner
-            </label>        
+            </label>
           </div>
 
-          <button type="button" class="button barButton"
+          <button
+            type="button"
+            class="button barButton"
             @click="$eventHub.$emit('remove_selection')"
-          >
-            supprimer sélection
-          </button>
+          >supprimer sélection</button>
 
           <!-- <input type="range" min="1" max="10" v-model="drawing_options.width" /> -->
         </div>
-
       </template>
     </div>
 
     <div class="m_mediamap">
-      <div 
+      <div
         class="m_mediamap--grid"
         :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
       />
 
       <div class="m_mediamap--buttons">
-        <button v-if="can_admin_folder" type="button" class="buttonLink" @click="showEditProjectModal = true" :disabled="read_only">
-          {{ $t('edit') }}
-        </button>
-        <button v-if="can_admin_folder" type="button" class="buttonLink" @click="removeProject()" :disabled="read_only">
-          {{ $t('remove') }}
-        </button>
+        <button
+          v-if="can_admin_folder"
+          type="button"
+          class="buttonLink"
+          @click="showEditProjectModal = true"
+          :disabled="read_only"
+        >modifier les informations</button>
+        <button
+          v-if="can_admin_folder"
+          type="button"
+          class="buttonLink"
+          @click="removeProject()"
+          :disabled="read_only"
+        >{{ $t('remove') }}</button>
       </div>
 
       <div class="m_mediamap--back" @click="closeProject">
-        <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="64px" height="64px"
-          viewBox="0 0 595.28 841.89" style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
-        <polygon points="44.17,42.51 28.59,57.07 28.59,289.94 36.38,304.49 59.76,326.32 67.55,326.32 75.34,319.05 75.34,122.55 
+        <svg
+          version="1.1"
+          id="Calque_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          width="64px"
+          height="64px"
+          viewBox="0 0 595.28 841.89"
+          style="enable-background:new 0 0 595.28 841.89;"
+          xml:space="preserve"
+        >
+          <polygon
+            points="44.17,42.51 28.59,57.07 28.59,289.94 36.38,304.49 59.76,326.32 67.55,326.32 75.34,319.05 75.34,122.55 
           83.14,122.55 402.61,420.94 410.4,420.94 433.78,399.1 433.78,391.83 114.31,93.45 114.31,86.17 324.7,86.17 332.48,78.89 
-          332.48,71.62 309.11,49.78 293.53,42.51 "/>
+          332.48,71.62 309.11,49.78 293.53,42.51 "
+          />
         </svg>
       </div>
-
 
       <EditProject
         v-if="showEditProjectModal"
@@ -177,25 +196,21 @@
         :read_only="read_only"
       />
 
-
-      <div
-        v-for="media in sortedMedias" 
+      <MediaPublication
+        v-for="media in sortedMedias"
         :key="media.slugMediaName"
-      >
-        <MediaPublication
-          :page="page"
-          :media="media"
-          :preview_mode="current_mode !== 'media'"
-          :read_only="read_only"
-          :pixelsPerMillimeters="1"
-          :slugFolderName="slugProjectName"
-          :metaFileName="media.metaFileName"
-          :type="'projects'"
-          @removePubliMedia="values => { removeMedia(values) }"
-          @selected="newSelection"
-          @unselected="noSelection"
-        />
-      </div>
+        :page="page"
+        :media="media"
+        :preview_mode="current_mode !== 'media'"
+        :read_only="read_only"
+        :pixelsPerMillimeters="1"
+        :slugFolderName="slugProjectName"
+        :metaFileName="media.metaFileName"
+        :type="'projects'"
+        @removePubliMedia="values => { removeMedia(values) }"
+        @selected="newSelection"
+        @unselected="noSelection"
+      />
 
       <FabricCanvas
         v-if="is_ready_to_mount_canvas"
@@ -205,19 +220,17 @@
         :current_mode="current_mode"
         :drawing_options="drawing_options"
         :class="{ 'is--clickthrough' : current_mode !== 'drawing' }"
-      />      
-
-    </div>  
-
-  </div>    
+      />
+    </div>
+  </div>
 </template>
 <script>
-import UploadFile from './modals/UploadFile.vue';
-import MediaPublication from './subcomponents/MediaPublication.vue';
-import FabricCanvas from './subcomponents/FabricCanvas.vue';
-import TagsAndAuthorFilters from './subcomponents/TagsAndAuthorFilters.vue';
-import { setTimeout } from 'timers';
-import EditProject from './modals/EditProject.vue';
+import UploadFile from "./modals/UploadFile.vue";
+import MediaPublication from "./subcomponents/MediaPublication.vue";
+import FabricCanvas from "./subcomponents/FabricCanvas.vue";
+import TagsAndAuthorFilters from "./subcomponents/TagsAndAuthorFilters.vue";
+import { setTimeout } from "timers";
+import EditProject from "./modals/EditProject.vue";
 
 export default {
   props: {
@@ -236,9 +249,9 @@ export default {
   data() {
     return {
       mediaSort: {
-        field: 'date_uploaded',
-        type: 'date',
-        order: 'descending'
+        field: "date_uploaded",
+        type: "date",
+        order: "descending"
       },
       showImportModal: false,
       show_filters: false,
@@ -253,60 +266,62 @@ export default {
         gridstep: 50
       },
       has_media_selected: false,
-      current_mode: 'preview',
+      current_mode: "preview",
       showInputPasswordField: false,
       drawing_options: {
         width: 4,
         select_mode: false,
-        color: '#000'
+        color: "#000"
       },
       is_ready_to_mount_canvas: false
-    }
+    };
   },
   mounted() {
-    if(this.$root.settings.media_filter.keyword || this.$root.settings.media_filter.author) {
+    if (
+      this.$root.settings.media_filter.keyword ||
+      this.$root.settings.media_filter.author
+    ) {
       this.show_filters = true;
     }
 
     setTimeout(() => {
       this.is_ready_to_mount_canvas = true;
-    }, 500)
+    }, 500);
   },
   created() {
     // document.addEventListener('dragover', this.fileDragover);
-    this.$eventHub.$on('modal.prev_media', this.prevMedia);
-    this.$eventHub.$on('modal.next_media', this.nextMedia);
+    this.$eventHub.$on("modal.prev_media", this.prevMedia);
+    this.$eventHub.$on("modal.next_media", this.nextMedia);
   },
   beforeDestroy() {
     // document.removeEventListener('dragover', this.fileDragover);
     this.$root.settings.media_filter.author = false;
     this.$root.settings.media_filter.keyword = false;
     this.$root.settings.media_filter.fav = false;
-    
-    this.$eventHub.$off('modal.prev_media', this.prevMedia);
-    this.$eventHub.$off('modal.next_media', this.nextMedia);
+
+    this.$eventHub.$off("modal.prev_media", this.prevMedia);
+    this.$eventHub.$off("modal.next_media", this.nextMedia);
   },
-  watch: {
-  },
+  watch: {},
 
   computed: {
     numberOfMedias() {
-      if(!this.project.hasOwnProperty('medias')) {
+      if (!this.project.hasOwnProperty("medias")) {
         return 0;
       }
       return Object.keys(this.project.medias).length;
     },
     mediaKeywords() {
       // grab all keywords from this.project.medias
-      return this.$root.getAllKeywordsFrom(this.project.medias);      
+      return this.$root.getAllKeywordsFrom(this.project.medias);
     },
     mediaAuthors() {
-      return this.$root.getAllAuthorsFrom(this.project.medias);      
+      return this.$root.getAllAuthorsFrom(this.project.medias);
     },
     sortedMedias() {
       var sortable = [];
 
-      if(!this.project.hasOwnProperty('medias')) {
+      if (!this.project.hasOwnProperty("medias")) {
         return sortable;
       }
 
@@ -314,39 +329,35 @@ export default {
         let orderBy;
         const media = this.project.medias[slugMediaName];
 
-        if (this.mediaSort.type === 'date') {
-          if(media.hasOwnProperty(this.mediaSort.field)) {
+        if (this.mediaSort.type === "date") {
+          if (media.hasOwnProperty(this.mediaSort.field)) {
             orderBy = +this.$moment(
               media[this.mediaSort.field],
-              'YYYY-MM-DD HH:mm:ss'
+              "YYYY-MM-DD HH:mm:ss"
             );
           }
-          if(orderBy === undefined || Number.isNaN(orderBy)) {
+          if (orderBy === undefined || Number.isNaN(orderBy)) {
             orderBy = 1000;
           }
-        } else if (this.mediaSort.type === 'alph') {
+        } else if (this.mediaSort.type === "alph") {
           orderBy = media[this.mediaSort.field];
-          if(orderBy === undefined || Number.isNaN(orderBy)) {
+          if (orderBy === undefined || Number.isNaN(orderBy)) {
             orderBy = 1000;
           }
-          if(orderBy === undefined) {
-            orderBy = 'z';
-          }          
+          if (orderBy === undefined) {
+            orderBy = "z";
+          }
         }
 
-        if(this.$root.isMediaShown(media)) {
+        if (this.$root.isMediaShown(media)) {
           sortable.push({ slugMediaName, orderBy });
         }
-        
       }
 
       let sortedSortable = sortable.sort(function(a, b) {
         let valA = a.orderBy;
         let valB = b.orderBy;
-        if (
-          typeof a.orderBy === 'string' &&
-          typeof b.orderBy === 'string'
-        ) {
+        if (typeof a.orderBy === "string" && typeof b.orderBy === "string") {
           valA = valA.toLowerCase();
           valB = valB.toLowerCase();
         }
@@ -359,7 +370,7 @@ export default {
         return 0;
       });
 
-      if (this.mediaSort.order === 'descending') {
+      if (this.mediaSort.order === "descending") {
         sortedSortable.reverse();
       }
 
@@ -371,7 +382,7 @@ export default {
         accumulator.push(sortedMediaObj);
         return accumulator;
       }, []);
-      
+
       return sortedMedias;
     }
   },
@@ -386,37 +397,47 @@ export default {
       this.mediaNav(+1);
     },
     mediaNav(relative_index) {
-      const current_media_index = this.sortedMedias.findIndex(m => m.metaFileName === this.$root.media_modal.current_metaFileName);
+      const current_media_index = this.sortedMedias.findIndex(
+        m => m.metaFileName === this.$root.media_modal.current_metaFileName
+      );
       const new_media = this.sortedMedias[current_media_index + relative_index];
       this.$root.closeMedia();
-      
-      if(!!new_media) {
+
+      if (!!new_media) {
         this.$nextTick(() => {
           this.openMediaModal(new_media.metaFileName);
         });
       }
-
     },
     openMediaModal(metaFileName) {
-      if (this.$root.state.dev_mode === 'debug') {
-        console.log('METHODS • MediaMap: openMediaModal');
+      if (this.$root.state.dev_mode === "debug") {
+        console.log("METHODS • MediaMap: openMediaModal");
       }
-      if(this.current_mode !== 'preview') {
+      if (this.current_mode !== "preview") {
         return;
       }
-      this.$root.openMedia({ slugProjectName: this.slugProjectName, metaFileName });      
+      this.$root.openMedia({
+        slugProjectName: this.slugProjectName,
+        metaFileName
+      });
     },
     createTextMedia() {
-      this.$eventHub.$on('socketio.media_created_or_updated', this.newTextMediaCreated);
+      this.$eventHub.$on(
+        "socketio.media_created_or_updated",
+        this.newTextMediaCreated
+      );
 
-      const y = Math.max(document.getElementsByClassName('m_projectview')[0].scrollTop, Math.round(Math.random() * 5) * 40);
+      const y = Math.max(
+        document.getElementsByClassName("m_projectview")[0].scrollTop,
+        Math.round(Math.random() * 5) * 40
+      );
       const z = this.$root.getHighestZNumberForProjectMedias();
 
       this.$root.createMedia({
         slugFolderName: this.slugProjectName,
-        type: 'projects',
+        type: "projects",
         additionalMeta: {
-          type: 'text',
+          type: "text",
           x: Math.round(Math.random() * 5) * 40,
           y,
           z,
@@ -424,12 +445,12 @@ export default {
           height: 200
         }
       });
-      this.current_mode = 'media';
+      this.current_mode = "media";
     },
     submitPassword() {
-      console.log('METHODS • Project: submitPassword');
+      console.log("METHODS • Project: submitPassword");
       this.$auth.updateAdminAccess({
-        "projects": {
+        projects: {
           [this.slugProjectName]: this.$refs.passwordField.value
         }
       });
@@ -438,29 +459,35 @@ export default {
     newTextMediaCreated(mdata) {
       if (this.$root.justCreatedMediaID === mdata.id) {
         this.$root.justCreatedMediaID = false;
-        this.$eventHub.$off('socketio.media_created_or_updated', this.newTextMediaCreated);
-        this.$root.openMedia({ slugProjectName: this.slugProjectName, metaFileName: mdata.metaFileName });          
+        this.$eventHub.$off(
+          "socketio.media_created_or_updated",
+          this.newTextMediaCreated
+        );
+        this.$root.openMedia({
+          slugProjectName: this.slugProjectName,
+          metaFileName: mdata.metaFileName
+        });
       }
     },
     removeMedia(values) {
-      if (this.$root.state.dev_mode === 'debug') {
-        console.log('METHODS • MediaCard: removeMedia');
+      if (this.$root.state.dev_mode === "debug") {
+        console.log("METHODS • MediaCard: removeMedia");
       }
-      if (window.confirm(this.$t('sureToRemoveMedia'))) {
+      if (window.confirm(this.$t("sureToRemoveMedia"))) {
         this.$root.removeMedia(this.slugProjectName, this.metaFileName);
       }
     },
     newSelection(mediaID) {
       this.has_media_selected = true;
-      this.$emit('newMediaSelected', mediaID);
+      this.$emit("newMediaSelected", mediaID);
     },
     noSelection() {
       this.has_media_selected = false;
     },
     removeProject() {
-      if (window.confirm(this.$t('sureToRemoveProject'))) {
-        this.$root.removeFolder({ 
-          type: 'projects', 
+      if (window.confirm(this.$t("sureToRemoveProject"))) {
+        this.$root.removeFolder({
+          type: "projects",
           slugFolderName: this.slugProjectName
         });
         this.closeProject();
@@ -470,8 +497,7 @@ export default {
       this.$root.closeProject();
     }
   }
-}
+};
 </script>
 <style>
-
 </style>

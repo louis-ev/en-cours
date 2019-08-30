@@ -95,6 +95,7 @@
         {{ $t('style') }}
       </button>-->
       <button
+        v-if="media.type === 'text'"
         type="button"
         class="buttonLink"
         @click.prevent.stop="$root.openMedia({ slugProjectName: slugFolderName, metaFileName: media.metaFileName })"
@@ -116,6 +117,7 @@ export default {
   props: {
     media: Object,
     page: Object,
+    map_height: Number,
     read_only: Boolean,
     preview_mode: Boolean,
     current_mode: String,
@@ -297,7 +299,7 @@ export default {
       yPos = Math.max(
         this.page.margin_top,
         Math.min(
-          this.page.height - this.page.margin_bottom - this.mediaSize.height,
+          this.map_height - this.page.margin_bottom - this.mediaSize.height,
           yPos
         )
       );
@@ -325,10 +327,7 @@ export default {
       // }
       return Math.max(
         20,
-        Math.min(
-          this.page.height - this.page.margin_bottom - this.mediaPos.y,
-          h
-        )
+        Math.min(this.map_height - this.page.margin_bottom - this.mediaPos.y, h)
       );
     },
 

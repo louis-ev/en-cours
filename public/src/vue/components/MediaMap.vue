@@ -143,7 +143,7 @@
       </template>
     </div>
 
-    <div class="m_mediamap">
+    <div class="m_mediamap" :style="mediaMapStyles">
       <div
         class="m_mediamap--grid"
         :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
@@ -199,6 +199,7 @@
       <MediaPublication
         v-for="media in sortedMedias"
         :key="media.slugMediaName"
+        :map_height="map_height"
         :page="page"
         :media="media"
         :preview_mode="current_mode !== 'media'"
@@ -215,12 +216,16 @@
       <FabricCanvas
         v-if="is_ready_to_mount_canvas"
         :medias="sortedMedias"
+        :map_height="map_height"
         :project="project"
         :slugProjectName="slugProjectName"
         :current_mode="current_mode"
         :drawing_options="drawing_options"
         :class="{ 'is--clickthrough' : current_mode !== 'drawing' }"
       />
+    </div>
+    <div class="m_makeMapBigger" v-if="can_admin_folder && project.height !== 'huge'">
+      <button type="button" @click="makeMapBigger">Agrandir le plan de travail</button>
     </div>
   </div>
 </template>
@@ -262,7 +267,6 @@ export default {
         margin_top: 0,
         margin_bottom: 0,
         width: 1200,
-        height: 5000,
         gridstep: 50
       },
       has_media_selected: false,
@@ -305,6 +309,15 @@ export default {
   watch: {},
 
   computed: {
+    map_height() {
+      let map_height = 5000;
+      if (this.project.height === "large") {
+        map_height = 10000;
+      } else if (this.project.height === "huge") {
+        map_height = 15000;
+      }
+      return map_height;
+    },
     numberOfMedias() {
       if (!this.project.hasOwnProperty("medias")) {
         return 0;
@@ -389,6 +402,24 @@ export default {
   methods: {
     fileDragover() {
       this.showImportModal = true;
+    },
+    makeMapBigger() {
+      let new_height;
+      if (
+        !this.project.hasOwnProperty("height") ||
+        this.project.height === "normal"
+      ) {
+        new_height = "large";
+      } else if (this.project.height === "large") {
+        new_height = "huge";
+      }
+      this.$root.editFolder({
+        type: "projects",
+        slugFolderName: this.slugProjectName,
+        data: {
+          height: new_height
+        }
+      });
     },
     prevMedia() {
       this.mediaNav(-1);

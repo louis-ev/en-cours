@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas ref="canvas" width="1200" height="5000" />
+    <canvas ref="canvas" width="1200" :height="map_height" />
   </div>
 </template>
 <script>
@@ -8,6 +8,7 @@ export default {
   props: {
     medias: Array,
     project: Object,
+    map_height: Number,
     slugProjectName: String,
     current_mode: String,
     drawing_options: Object

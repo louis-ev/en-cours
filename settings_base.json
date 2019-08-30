@@ -68,6 +68,11 @@
         "canvas_information": {
           "type": "string",
           "escape": false
+        },
+        "height": {
+          "type": "string",
+          "options": ["normal", "large", "huge"],
+          "default": "normal"
         }
       },
       "medias": {

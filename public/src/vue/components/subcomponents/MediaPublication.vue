@@ -7,6 +7,7 @@
     @mouseover="mouseOver"
     @mouseleave="mouseLeave"
     @mousedown="selectMedia"
+    @click.prevent.stop="preview_mode && media.type === 'image' ? $root.openMedia({ slugProjectName: slugFolderName, metaFileName: media.metaFileName }) : ''"
     :class="{ 
       'is--dragged' : is_dragged, 
       'is--resized' : is_resized, 

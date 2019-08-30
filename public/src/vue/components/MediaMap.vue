@@ -122,7 +122,7 @@
           v-if="can_admin_folder"
           @click="current_mode = 'drawing'"
           :class="{ 'is--active' : current_mode === 'drawing' }"
-        >2. liens</button>
+        >2. dessiner/annoter</button>
 
         <div class="padding-left-small" v-if="current_mode === 'drawing'">
           <div class="button barButton">

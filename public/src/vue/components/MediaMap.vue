@@ -143,7 +143,7 @@
       </template>
     </div>
 
-    <div class="m_mediamap" :style="mediaMapStyles">
+    <div class="m_mediamap" :style="media_map_styles">
       <div
         class="m_mediamap--grid"
         :style="`--gridstep: ${page.gridstep}px; --margin_left: ${page.margin_left}px; --margin_right: ${page.margin_right}px; --margin_top: ${page.margin_top}px; --margin_bottom: ${page.margin_bottom}px;`"
@@ -224,8 +224,12 @@
         :class="{ 'is--clickthrough' : current_mode !== 'drawing' }"
       />
     </div>
-    <div class="m_makeMapBigger" v-if="can_admin_folder && project.height !== 'huge'">
-      <button type="button" @click="makeMapBigger">Agrandir le plan de travail</button>
+    <div class="m_makeMapBigger" v-if="can_admin_folder">
+      <button
+        type="button"
+        @click="makeMapBigger"
+        :disabled="project.height === 'huge'"
+      >Agrandir le plan de travail</button>
     </div>
   </div>
 </template>
@@ -309,12 +313,17 @@ export default {
   watch: {},
 
   computed: {
+    media_map_styles() {
+      return {
+        height: this.map_height + "px"
+      };
+    },
     map_height() {
       let map_height = 5000;
       if (this.project.height === "large") {
-        map_height = 10000;
+        map_height = 8000;
       } else if (this.project.height === "huge") {
-        map_height = 15000;
+        map_height = 11000;
       }
       return map_height;
     },

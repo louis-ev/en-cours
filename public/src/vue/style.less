@@ -2693,6 +2693,18 @@ body {
   }
   &[data-media_type='text'] {
     z-index: 2;
+
+    .mediaTextContent {
+      > * {
+        // height: 100%;
+        > p {
+          // height: 100%;
+          iframe {
+            // height: 100%;
+          }
+        }
+      }
+    }
   }
   &[data-media_type='video'] {
     .plyr {

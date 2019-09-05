@@ -1,14 +1,15 @@
 <template>
   <div class="m_topbar">
-    <div class="m_topbar--left" >
-      <div class="m_topbar--left--logo" >
+    <div class="m_topbar--left">
+      <div class="m_topbar--left--logo">
         <!-- <transition name="BackButton" :duration="500">
           <button class="backButton text-ellipsis" type="button" v-if="has_back_button" @click="goBack()">
             ‹ <span class="backButton--text">{{ $t('back') }}</span>
           </button>
-        </transition> -->
+        </transition>-->
         <span class="m_topbar--left--logo--type" @click="goHome()">
-          en cours<span>*</span>
+          en cours
+          <span>*</span>
         </span>
       </div>
       <!-- 
@@ -27,74 +28,60 @@
       -->
     </div>
 
-    <div 
+    <div
       class="m_topbar--center"
       :class="{ 'has--menu_open' : $root.do_navigation.view === 'ProjectView' }"
     />
 
-    <div class="m_topbar--right"
-    >
-      <div class="m_topbar--right--tagline"
-        v-if="!project.hasOwnProperty('name')" 
-      >
+    <div class="m_topbar--right">
+      <div class="m_topbar--right--tagline" v-if="!project.hasOwnProperty('name')">
         <div>
           <small>
-            *un <span :style="`color: var(--color-maroon);`">état</span> de la recherche <br>
-            de projet à l’ensad
+            *un
+            <span :style="`color: var(--color-maroon);`">état</span> de la recherche
+            <br />de projet à sciences po
           </small>
         </div>
       </div>
-      <div class="m_topbar--right--projectName"
-        v-if="project.hasOwnProperty('name')" 
-      >
-        <div
-          @click="$root.do_navigation.view = 'ProjectView'"
-        >
-          <span>
-            {{ project.name }}
-          </span>
+      <div class="m_topbar--right--projectName" v-if="project.hasOwnProperty('name')">
+        <div @click="$root.do_navigation.view = 'ProjectView'">
+          <span>{{ project.name }}</span>
         </div>
       </div>
     </div>
 
-
-    <div class="m_topbar--status" v-if="!$root.state.connected">
-      {{ $t('notifications.connection_lost') }} {{ $t('notifications.contents_wont_be_editable') }}      
-    </div>    
+    <div
+      class="m_topbar--status"
+      v-if="!$root.state.connected"
+    >{{ $t('notifications.connection_lost') }} {{ $t('notifications.contents_wont_be_editable') }}</div>
   </div>
 </template>
 <script>
-
 export default {
-  props: [ 'has_back_button', 'slugProjectName', 'authors', 'project' ],
-  components: {
-  },
+  props: ["has_back_button", "slugProjectName", "authors", "project"],
+  components: {},
   data() {
     return {
       showQRModal: false,
 
       menu_is_enabled: false,
       show_menu: false
-    }
+    };
   },
-  created() {
-  },
+  created() {},
   mounted() {
     this.menuVisibility();
-
   },
-  beforeDestroy() {
-  },
+  beforeDestroy() {},
   watch: {
-    '$root.settings.windowWidth': function() {
+    "$root.settings.windowWidth": function() {
       this.menuVisibility();
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     menuVisibility() {
-      if(this.$root.settings.windowWidth < 820) {
+      if (this.$root.settings.windowWidth < 820) {
         this.menu_is_enabled = true;
       } else {
         this.menu_is_enabled = false;
@@ -110,10 +97,10 @@ export default {
       this.show_menu = !this.show_menu;
     },
     urlToPortrait(slug, preview) {
-      if(!preview) return '';
+      if (!preview) return "";
       let pathToSmallestThumb = preview.filter(m => m.size === 180)[0].path;
       return pathToSmallestThumb;
     }
   }
-}
+};
 </script>

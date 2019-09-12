@@ -93,7 +93,7 @@ module.exports = (function() {
       password: 'Mot de passe',
       protected_by_pass: 'protégé par mot de passe',
       password_instructions:
-        'Si existant, seul les utilisateurs possédant ce mot de passe pourront modifier ce projet.',
+        'Seuls les utilisateurs possédant ce mot de passe pourront modifier ou supprimer ce projet.',
 
       sort_by: 'Organiser par',
       in_the_order: 'Dans l’ordre',

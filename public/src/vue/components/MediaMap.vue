@@ -47,7 +47,7 @@
       <div class="m_metaField" v-if="project.password === 'has_pass'">
         <small
           class="m_project--presentation--text--infos--password c-rouge"
-          v-if="project.password === 'has_pass'"
+          v-if="project.password === 'has_pass' && !can_admin_folder"
         >
           <label>{{ $t('protected_by_pass') }}</label>
         </small>

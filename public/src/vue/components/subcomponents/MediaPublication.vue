@@ -7,7 +7,7 @@
     @mouseover="mouseOver"
     @mouseleave="mouseLeave"
     @mousedown="selectMedia"
-    @click.prevent.stop="preview_mode && media.type === 'image' ? $root.openMedia({ slugProjectName: slugFolderName, metaFileName: media.metaFileName }) : ''"
+    @click="openMedia"
     :class="{ 
       'is--dragged' : is_dragged, 
       'is--resized' : is_resized, 
@@ -231,6 +231,17 @@ export default {
     }
   },
   methods: {
+    openMedia(event) {
+      if (this.$root.state.dev_mode === "debug") {
+        console.log(`METHODS • MediaPublication: openMedia`);
+      }
+      if (this.preview_mode && this.media.type === "image")
+        this.$root.openMedia({
+          slugProjectName: this.slugFolderName,
+          metaFileName: this.media.metaFileName
+        });
+      event.stopPropagation();
+    },
     toggleEditWindow() {
       this.$eventHub.$emit(
         "publication.setCSSEditWindow",
@@ -579,6 +590,7 @@ export default {
         console.log(`METHODS • MediaPublication: selectMedia`);
       }
       if (!this.preview_mode) {
+        debugger;
         this.is_selected = true;
         event.stopPropagation();
       }

@@ -1,6 +1,44 @@
 <template>
-  <div class="m_listview"
-  >
+  <div class="m_listview">
+    <div class="m_showAboutPane">
+      <button
+        type="button"
+        class="button_showAboutPane"
+        :class="{ 'is--active' : show_about_pane } "
+        @click="show_about_pane = !show_about_pane"
+      >À propos</button>
+      <transition name="slideFromTop">
+        <div v-if="show_about_pane">
+          <p>
+            Cet outil de documentation est le fruit du workshop “Nos traces communes”
+            sur la documentation de projet en école d’art et de design mené en février 2019
+            avec des étudiants de 4e et 5e année Design graphique. Tous les contenus présents ici sont stockés sur les serveurs de l’école.
+          </p>
+          <p>
+            Invité&nbsp;: Louis Eveillard de
+            <a
+              href="https://latelier-des-chercheurs.fr/"
+              target="_blank"
+            >l’Atelier des Chercheurs</a>. Enseignant&nbsp;: Vadim Bernard.
+          </p>
+          <p>Étudiant.e.s&nbsp;: Ana Brena, Florine Caro, Odilon Coutarel, George Lamy, Eliot Nasrallah, Eva Scharter, Chloe Segalen, Raphael Stodden, Agathe Truchon-Barthes.</p>
+          <p>
+            Quelques photos du workshop&nbsp;:
+            <a
+              href="https://flic.kr/s/aHsmAZhxHC"
+              target="_blank"
+            >https://flic.kr/s/aHsmAZhxHC</a>
+          </p>
+          <p>
+            Si vous avez des retours à faire ou des questions sur cet outil, vous pouvez utiliser le formulaire suivant&nbsp;:
+            <a
+              href="https://framaforms.org/retours-sur-loutil-en-cours-1568369141"
+            >envoyer des retours</a>
+          </p>
+        </div>
+      </transition>
+    </div>
+
     <main class="m_projects main_scroll_panel">
       <div class="m_actionbar">
         <div class="m_actionbar--buttonBar">
@@ -10,9 +48,7 @@
             :disabled="read_only"
             :key="'createButton'"
           >
-            <span>
-              {{ $t('create_a_project') }}
-            </span>
+            <span>{{ $t('create_a_project') }}</span>
           </button>
           <CreateProject
             v-if="showCreateProjectModal"
@@ -25,15 +61,19 @@
           <div>
             <template v-if="Object.keys(projects).length > 0">
               <template v-if="!show_medias_instead_of_projects">
-                {{ $t('showing') }} 
-                <span :class="{ 'c-rouge' : Object.keys(sortedProjectsSlug).length !== Object.keys(projects).length }">
-                  {{ sortedProjectsSlug.length }} 
-                  {{ $t('projects_of') }} 
+                {{ $t('showing') }}
+                <span
+                  :class="{ 'c-rouge' : Object.keys(sortedProjectsSlug).length !== Object.keys(projects).length }"
+                >
+                  {{ sortedProjectsSlug.length }}
+                  {{ $t('projects_of') }}
                   {{ Object.keys(projects).length }}
                 </span>
                 <template v-if="$root.allKeywords.length > 0 || $root.allAuthors.length > 0">
-                  — 
-                  <button type="button" class="button-nostyle text-uc button-triangle"
+                  —
+                  <button
+                    type="button"
+                    class="button-nostyle text-uc button-triangle"
                     :class="{ 'is--active' : show_filters }"
                     @click="show_filters = !show_filters"
                   >{{ $t('filters') }}</button>
@@ -49,15 +89,19 @@
                 />
               </template>
               <template v-else>
-                {{ $t('showing') }} 
-                <span :class="{ 'c-rouge' : Object.keys(sortedMedias).length !== Object.keys(allMedias).length }">
-                  {{ Object.keys(sortedMedias).length }} 
-                  {{ $t('medias_of') }} 
+                {{ $t('showing') }}
+                <span
+                  :class="{ 'c-rouge' : Object.keys(sortedMedias).length !== Object.keys(allMedias).length }"
+                >
+                  {{ Object.keys(sortedMedias).length }}
+                  {{ $t('medias_of') }}
                   {{ Object.keys(allMedias).length }}
                 </span>
                 <template v-if="$root.allKeywords.length > 0 || $root.allAuthors.length > 0">
-                  — 
-                  <button type="button" class="button-nostyle text-uc button-triangle"
+                  —
+                  <button
+                    type="button"
+                    class="button-nostyle text-uc button-triangle"
                     :class="{ 'is--active' : show_filters }"
                     @click="show_filters = !show_filters"
                   >{{ $t('filters') }}</button>
@@ -74,22 +118,15 @@
                   @setAuthorFilter="a => $root.setMediaAuthorFilter(a)"
                   @setFavFilter="a => $root.setFavAuthorFilter(a)"
                 />
-
               </template>
-
             </template>
-            <template v-else>
-              {{ $t('no_projects_yet') }}
-            </template>          
+            <template v-else>{{ $t('no_projects_yet') }}</template>
           </div>
         </div>
       </div>
-        
+
       <template v-if="!show_medias_instead_of_projects">
-        <transition-group
-          class="m_projects--list"
-          name="list-complete"
-        >
+        <transition-group class="m_projects--list" name="list-complete">
           <Project
             v-for="(sortedProject, index) in sortedProjectsSlug"
             :key="sortedProject.slugProjectName"
@@ -99,19 +136,15 @@
             :index="index"
           />
         </transition-group>
-
       </template>
       <template v-else>
-        <transition-group
-          class="m_projects--list mini_scroll_panel"
-          name="list-complete"
-        >
+        <transition-group class="m_projects--list mini_scroll_panel" name="list-complete">
           <div v-for="item in groupedMedias" :key="item[0]">
-            <h3 class="font-folder_title margin-sides-small margin-none margin-bottom-small">
-              {{ $root.formatDateToHuman(item[0]) }}
-            </h3>
+            <h3
+              class="font-folder_title margin-sides-small margin-none margin-bottom-small"
+            >{{ $root.formatDateToHuman(item[0]) }}</h3>
 
-            <div class="m_mediaShowAll"> 
+            <div class="m_mediaShowAll">
               <div v-for="media in item[1]" :key="media.slugMediaName">
                 <MediaCard
                   :key="media.slugMediaName"
@@ -119,26 +152,22 @@
                   :metaFileName="media.metaFileName"
                   :slugProjectName="media.slugProjectName"
                   :preview_size="180"
-                >
-                </MediaCard>
+                ></MediaCard>
               </div>
             </div>
           </div>
         </transition-group>
       </template>
-
     </main>
-
-
   </div>
 </template>
 <script>
-import BottomFooter from './components/BottomFooter.vue';
-import Project from './components/Project.vue';
-import CreateProject from './components/modals/CreateProject.vue';
-import MediaCard from './components/subcomponents/MediaCard.vue';
-import TagsAndAuthorFilters from './components/subcomponents/TagsAndAuthorFilters.vue';
-import { setTimeout } from 'timers';
+import BottomFooter from "./components/BottomFooter.vue";
+import Project from "./components/Project.vue";
+import CreateProject from "./components/modals/CreateProject.vue";
+import MediaCard from "./components/subcomponents/MediaCard.vue";
+import TagsAndAuthorFilters from "./components/subcomponents/TagsAndAuthorFilters.vue";
+import { setTimeout } from "timers";
 
 export default {
   props: {
@@ -158,36 +187,39 @@ export default {
       showCreateProjectModal: false,
       currentLang: this.$root.lang.current,
       show_medias_instead_of_projects: false,
+      show_about_pane: false,
 
-      currentFilter: '',      
+      currentFilter: "",
       currentSort: {
-        field: 'date_created',
-        type: 'date',
-        order: 'descending'
+        field: "date_created",
+        type: "date",
+        order: "descending"
       },
 
       show_filters: false
     };
   },
   mounted() {
-    if(this.$root.settings.project_filter.keyword || this.$root.settings.project_filter.author) {
+    if (
+      this.$root.settings.project_filter.keyword ||
+      this.$root.settings.project_filter.author
+    ) {
       this.show_filters = true;
     }
   },
-  beforeDestroy() {
-  },
+  beforeDestroy() {},
   watch: {
     currentLang: function() {
       this.$root.updateLocalLang(this.currentLang);
     },
     show_medias_instead_of_projects: function() {
       // load all projects’ medias if it isn’t there
-      if(this.show_medias_instead_of_projects) {
+      if (this.show_medias_instead_of_projects) {
         this.$root.loadAllProjectsMedias();
       }
     },
     show_filters: function() {
-      if(!this.show_filters) {
+      if (!this.show_filters) {
         this.$root.settings.project_filter.keyword = false;
         this.$root.settings.project_filter.author = false;
       }
@@ -198,79 +230,98 @@ export default {
       return this.$root.getAllKeywordsFrom(this.projects);
     },
     projectsAuthors: function() {
-      return this.$root.getAllAuthorsFrom(this.projects);      
+      return this.$root.getAllAuthorsFrom(this.projects);
     },
     mediasKeywords: function() {
-      return this.$root.getAllKeywordsFrom(this.filteredMedias);      
+      return this.$root.getAllKeywordsFrom(this.filteredMedias);
     },
     mediasAuthors: function() {
-      return this.$root.getAllAuthorsFrom(this.filteredMedias);      
+      return this.$root.getAllAuthorsFrom(this.filteredMedias);
     },
     sortedProjectsSlug: function() {
       var sortable = [];
 
-      if(!this.projects || this.projects.length === 0) {
+      if (!this.projects || this.projects.length === 0) {
         return [];
       }
 
       for (let slugProjectName in this.projects) {
         let orderBy;
 
-        if (this.currentSort.type === 'date') {
+        if (this.currentSort.type === "date") {
           orderBy = +this.$moment(
             this.projects[slugProjectName][this.currentSort.field],
-            'YYYY-MM-DD HH:mm:ss'
+            "YYYY-MM-DD HH:mm:ss"
           );
-        } else if (this.currentSort.type === 'alph') {
+        } else if (this.currentSort.type === "alph") {
           orderBy = this.projects[slugProjectName][this.currentSort.field];
         }
 
-        if(this.$root.settings.project_filter.keyword === false && this.$root.settings.project_filter.author === false) {
+        if (
+          this.$root.settings.project_filter.keyword === false &&
+          this.$root.settings.project_filter.author === false
+        ) {
           sortable.push({ slugProjectName, orderBy });
           continue;
         }
 
-        if(this.$root.settings.project_filter.keyword !== false && this.$root.settings.project_filter.author !== false) {
+        if (
+          this.$root.settings.project_filter.keyword !== false &&
+          this.$root.settings.project_filter.author !== false
+        ) {
           // only add to sorted array if project has this keyword
-          if(this.projects[slugProjectName].hasOwnProperty('keywords') 
-            && typeof this.projects[slugProjectName].keywords === 'object' 
-            && this.projects[slugProjectName].keywords.filter(k => k.title === this.$root.settings.project_filter.keyword).length > 0) {
-            
-            if(this.projects[slugProjectName].hasOwnProperty('authors') 
-              && typeof this.projects[slugProjectName].authors === 'object' 
-              && this.projects[slugProjectName].authors.filter(k => k.name === this.$root.settings.project_filter.author).length > 0) {
-            
+          if (
+            this.projects[slugProjectName].hasOwnProperty("keywords") &&
+            typeof this.projects[slugProjectName].keywords === "object" &&
+            this.projects[slugProjectName].keywords.filter(
+              k => k.title === this.$root.settings.project_filter.keyword
+            ).length > 0
+          ) {
+            if (
+              this.projects[slugProjectName].hasOwnProperty("authors") &&
+              typeof this.projects[slugProjectName].authors === "object" &&
+              this.projects[slugProjectName].authors.filter(
+                k => k.name === this.$root.settings.project_filter.author
+              ).length > 0
+            ) {
               sortable.push({ slugProjectName, orderBy });
             }
           }
           continue;
         }
         // if a project keyword filter is set
-        if(this.$root.settings.project_filter.keyword !== false) {
+        if (this.$root.settings.project_filter.keyword !== false) {
           // only add to sorted array if project has this keyword
-          if(this.projects[slugProjectName].hasOwnProperty('keywords') 
-            && typeof this.projects[slugProjectName].keywords === 'object' 
-            && this.projects[slugProjectName].keywords.filter(k => k.title === this.$root.settings.project_filter.keyword).length > 0) {
+          if (
+            this.projects[slugProjectName].hasOwnProperty("keywords") &&
+            typeof this.projects[slugProjectName].keywords === "object" &&
+            this.projects[slugProjectName].keywords.filter(
+              k => k.title === this.$root.settings.project_filter.keyword
+            ).length > 0
+          ) {
             sortable.push({ slugProjectName, orderBy });
           }
           continue;
         }
 
-        if(this.$root.settings.project_filter.author !== false) {
+        if (this.$root.settings.project_filter.author !== false) {
           // only add to sorted array if project has this keyword
-          if(this.projects[slugProjectName].hasOwnProperty('authors') 
-            && typeof this.projects[slugProjectName].authors === 'object' 
-            && this.projects[slugProjectName].authors.filter(k => k.name === this.$root.settings.project_filter.author).length > 0) {
+          if (
+            this.projects[slugProjectName].hasOwnProperty("authors") &&
+            typeof this.projects[slugProjectName].authors === "object" &&
+            this.projects[slugProjectName].authors.filter(
+              k => k.name === this.$root.settings.project_filter.author
+            ).length > 0
+          ) {
             sortable.push({ slugProjectName, orderBy });
           }
           continue;
         }
-
       }
 
-      // if there is no project in sortable, it is probable that filters 
+      // if there is no project in sortable, it is probable that filters
       // were too restrictive
-      if(sortable.length === 0) {
+      if (sortable.length === 0) {
         // lets remove filters if there are any
         this.$nextTick(() => {
           // this.$root.settings.project_filter.keyword = false;
@@ -280,7 +331,7 @@ export default {
       let sortedSortable = sortable.sort(function(a, b) {
         let valA = a.orderBy;
         let valB = b.orderBy;
-        if (typeof a.orderBy === 'string' && typeof b.orderBy === 'string') {
+        if (typeof a.orderBy === "string" && typeof b.orderBy === "string") {
           valA = valA.toLowerCase();
           valB = valB.toLowerCase();
         }
@@ -293,7 +344,7 @@ export default {
         return 0;
       });
 
-      if (this.currentSort.order === 'descending') {
+      if (this.currentSort.order === "descending") {
         sortedSortable.reverse();
       }
 
@@ -302,19 +353,22 @@ export default {
     presentationText: function() {
       if (this.presentationMD.hasOwnProperty(this.currentLang)) {
         return this.presentationMD[this.currentLang];
-      } else if (this.presentationMD.hasOwnProperty('content')) {
-        return this.presentationMD['content'];
+      } else if (this.presentationMD.hasOwnProperty("content")) {
+        return this.presentationMD["content"];
       }
       return this.presentationMD;
     },
     allMedias: function() {
       let allMedias = [];
-      if(this.projects === undefined || Object.keys(this.projects).length === 0) {
+      if (
+        this.projects === undefined ||
+        Object.keys(this.projects).length === 0
+      ) {
         return [];
       }
       Object.keys(this.projects).map(slugProjectName => {
         const folder = this.projects[slugProjectName];
-        if(!folder.hasOwnProperty('medias')) {
+        if (!folder.hasOwnProperty("medias")) {
           return;
         }
         const folder_medias = folder.medias;
@@ -331,20 +385,20 @@ export default {
       return this.allMedias.filter(m => this.$root.isMediaShown(m));
     },
     sortedMedias: function() {
-      let sortedMedias = this.$_.sortBy(this.filteredMedias, 'date_created');
+      let sortedMedias = this.$_.sortBy(this.filteredMedias, "date_created");
       return sortedMedias.reverse();
     },
     groupedMedias: function() {
-      let mediaGroup = this.$_.groupBy(this.sortedMedias, (media) => {
-          if(media.hasOwnProperty('date_created')) {
-            var dateMoment = this.$moment(media.date_created);
-            return dateMoment.format('YYYY-MM-DD');
-          }
-        });
-      mediaGroup = this.$_.pairs(mediaGroup); 
+      let mediaGroup = this.$_.groupBy(this.sortedMedias, media => {
+        if (media.hasOwnProperty("date_created")) {
+          var dateMoment = this.$moment(media.date_created);
+          return dateMoment.format("YYYY-MM-DD");
+        }
+      });
+      mediaGroup = this.$_.pairs(mediaGroup);
       mediaGroup = this.$_.sortBy(mediaGroup);
       mediaGroup = mediaGroup.reverse();
-      return mediaGroup;  
+      return mediaGroup;
     }
   },
   methods: {
@@ -355,14 +409,43 @@ export default {
       this.currentFilter = newFilter;
     },
     urlToPortrait(slug, filename) {
-      if(filename === undefined) {
-        return '';
+      if (filename === undefined) {
+        return "";
       }
       return `/${this.$root.state.authorsFolder}/${slug}/${filename}`;
     }
   }
 };
 </script>
-<style>
+<style lang="scss">
+.m_showAboutPane {
+  margin: 0 1em;
+  margin-bottom: 1em;
 
+  > button {
+    margin: 0;
+    padding-top: 0;
+    min-height: 0;
+  }
+
+  > div {
+    margin: 0 1em;
+  }
+}
+.button_showAboutPane {
+  &::before {
+    content: "→";
+    display: inline-block;
+    transform-origin: 50% center;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  &.is--active {
+    color: inherit;
+    background-color: inherit;
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+}
 </style>

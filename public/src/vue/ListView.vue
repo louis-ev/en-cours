@@ -12,7 +12,9 @@
           <p>
             Cet outil de documentation est le fruit du workshop “Nos traces communes”
             sur la documentation de projet en école d’art et de design mené en février 2019
-            avec des étudiants de 4e et 5e année Design graphique. Tous les contenus présents ici sont stockés sur les serveurs de l’école.
+            avec des étudiants de 4
+            <sup>e</sup> et 5
+            <sup>e</sup> année Design graphique.
           </p>
           <p>
             Invité&nbsp;: Louis Eveillard de

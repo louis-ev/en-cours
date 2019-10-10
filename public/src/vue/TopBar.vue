@@ -39,7 +39,7 @@
           <small>
             *un
             <span :style="`color: var(--color-maroon);`">état</span> de la recherche
-            <br />de projet à sciences po
+            <br />de projet à artec
           </small>
         </div>
       </div>

@@ -85,7 +85,7 @@
     "ws": "^6.1.2"
   },
   "devDependencies": {
-    "electron": "^2.0.16",
+    "electron": "^7.2.4",
     "electron-builder": "^20.38.5",
     "electron-packager": "^13.0.1",
     "electron-prebuilt": "^1.4.13",

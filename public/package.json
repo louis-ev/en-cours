@@ -28,7 +28,7 @@
     "imagetracerjs": "^1.2.5",
     "instascan": "^1.0.0",
     "jquery": "^3.3.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "node-lessify": "^0.1.5",
     "node-sass": "^4.11.0",
     "portal-vue": "^1.5.1",
